@@ -4,19 +4,19 @@ namespace duncan3dc;
 
 class Mailer {
 
-    public  $server;
-    public  $fromAddress;
-    public  $fromName;
+    protected $server;
+    protected $fromAddress;
+    protected $fromName;
 
-    public  $content;
+    protected $content;
 
-    public  $to;
-    public  $subject;
+    protected $to;
+    protected $subject;
 
-    public  $attachments;
+    protected $attachments;
 
-    public  $cc;
-    public  $bcc;
+    protected $cc;
+    protected $bcc;
 
 
     public function __construct($options=false) {
