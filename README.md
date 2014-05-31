@@ -74,3 +74,14 @@ $mailer->setRecipient("name@example.com");
 $mailer->addAttachment("/tmp/UGqucq","sensible-filename.xls");
 $mailer->send();
 ```
+
+-------------------
+
+If method chaining is your thing then all the public methods except send() return the instance of the Mailer class
+```
+(new Mailer())
+    ->setSubject("Test Email")
+    ->setRecipient("name@example.com")
+    ->addContent("Hello")
+    ->send();
+```

@@ -61,6 +61,7 @@ class Mailer {
 
         $this->subject = $subject;
 
+        return $this;
     }
 
 
@@ -70,6 +71,7 @@ class Mailer {
 
         $this->addRecipient($address);
 
+        return $this;
     }
 
 
@@ -81,6 +83,7 @@ class Mailer {
 
         $this->to = array_merge($this->to,$address);
 
+        return $this;
     }
 
 
@@ -90,6 +93,7 @@ class Mailer {
 
         $this->addCc($address);
 
+        return $this;
     }
 
 
@@ -101,6 +105,7 @@ class Mailer {
 
         $this->cc = array_merge($this->cc,$address);
 
+        return $this;
     }
 
 
@@ -110,6 +115,7 @@ class Mailer {
 
         $this->addBcc($address);
 
+        return $this;
     }
 
 
@@ -121,6 +127,7 @@ class Mailer {
 
         $this->bcc = array_merge($this->bcc,$address);
 
+        return $this;
     }
 
 
@@ -130,6 +137,7 @@ class Mailer {
 
         $this->addReplyTo($address);
 
+        return $this;
     }
 
 
@@ -141,6 +149,7 @@ class Mailer {
 
         $this->replyTo = array_merge($this->replyTo,$address);
 
+        return $this;
     }
 
 
@@ -148,6 +157,7 @@ class Mailer {
 
         $this->content .= $content;
 
+        return $this;
     }
 
 
@@ -155,6 +165,7 @@ class Mailer {
 
         $this->attachments[$path] = $filename;
 
+        return $this;
     }
 
 
