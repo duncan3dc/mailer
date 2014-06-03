@@ -30,6 +30,7 @@ class Mailer {
             "fromName"      =>  "",
             "encryption"    =>  "ssl",
             "port"          =>  465,
+            "returnPath"    =>  false,
         ]);
 
         $this->server = $options["smtpServer"];
@@ -39,6 +40,7 @@ class Mailer {
         $this->fromName = $options["fromName"];
         $this->encryption = $options["encryption"];
         $this->port = $options["port"];
+        $this->returnPath = $options["returnPath"];
 
         $this->to = [];
         $this->subject = "";
@@ -193,6 +195,11 @@ class Mailer {
 
         # Create a new message
         $mail = \Swift_Message::newInstance();
+
+        # Set the bounce return path if one has been specified
+        if($this->returnPath) {
+            $mail->setReturnPath($this->returnPath);
+        }
 
         $html = "<html>";
             $html .= "<head>";
