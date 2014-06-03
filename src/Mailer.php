@@ -1,6 +1,7 @@
 <?php
 
 namespace duncan3dc;
+use \duncan3dc\Helpers\Helper;
 
 class Mailer {
 
@@ -21,22 +22,13 @@ class Mailer {
 
     public function __construct($options=false) {
 
-        $defaults = [
+        $options = Helper::getOptions($options,[
             "smtpServer"    =>  "",
             "username"      =>  false,
             "password"      =>  false,
             "fromAddress"   =>  "no-reply@example.com",
             "fromName"      =>  "",
-        ];
-        if(is_array($options)) {
-            foreach($options as $key => $val) {
-                if(!array_key_exists($key,$defaults)) {
-                    throw new \Exception("Unknown parameter (" . $key . ")");
-                }
-                $defaults[$key] = $val;
-            }
-        }
-        $options = $defaults;
+        ]);
 
         $this->server = $options["smtpServer"];
         $this->username = $options["username"];
