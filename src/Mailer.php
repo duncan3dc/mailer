@@ -28,6 +28,8 @@ class Mailer {
             "password"      =>  false,
             "fromAddress"   =>  "no-reply@example.com",
             "fromName"      =>  "",
+            "encryption"    =>  "ssl",
+            "port"          =>  465,
         ]);
 
         $this->server = $options["smtpServer"];
@@ -35,6 +37,8 @@ class Mailer {
         $this->password = $options["password"];
         $this->fromAddress = $options["fromAddress"];
         $this->fromName = $options["fromName"];
+        $this->encryption = $options["encryption"];
+        $this->port = $options["port"];
 
         $this->to = [];
         $this->subject = "";
@@ -173,7 +177,7 @@ class Mailer {
 
         # Connect to the smtp server
         if($this->server) {
-            $smtp = \Swift_SmtpTransport::newInstance($this->server,465,"ssl");
+            $smtp = \Swift_SmtpTransport::newInstance($this->server,$this->port,$this->encryption);
         } else {
             $smtp = \Swift_SmtpTransport::newInstance("localhost",25);
         }
