@@ -39,13 +39,13 @@ Examples
 --------
 
 The Mailer class uses a vendor name space of duncan3dc
-```
+```php
 use duncan3dc\Mailer;
 ```
 
 -------------------
 
-```
+```php
 $mailer = new Mailer();
 $mailer->setSubject("Test Email");
 $mailer->setRecipient("name@example.com");
@@ -55,7 +55,7 @@ $mailer->send();
 
 -------------------
 
-```
+```php
 $mailer = new Mailer([
     "fromAddress"   =>  "from@example.com",
     "fromName"      =>  "Mr Example",
@@ -67,7 +67,7 @@ $mailer->send();
 
 -------------------
 
-```
+```php
 $mailer = new Mailer();
 $mailer->setSubject("Spreadsheet Attached");
 $mailer->setRecipient("name@example.com");
@@ -78,7 +78,7 @@ $mailer->send();
 -------------------
 
 If method chaining is your thing then all the public methods except send() return the instance of the Mailer class
-```
+```php
 (new Mailer())
     ->setSubject("Test Email")
     ->setRecipient("name@example.com")
