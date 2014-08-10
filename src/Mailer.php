@@ -1,10 +1,11 @@
 <?php
 
-namespace duncan3dc;
+namespace duncan3dc\SwiftMailer;
+
 use duncan3dc\Helpers\Helper;
 
-class Mailer {
-
+class Mailer
+{
     protected $server;
     protected $fromAddress;
     protected $fromName;
@@ -20,9 +21,9 @@ class Mailer {
     protected $bcc;
 
 
-    public function __construct($options=false) {
-
-        $options = Helper::getOptions($options,[
+    public function __construct($options = null)
+    {
+        $options = Helper::getOptions($options, [
             "smtpServer"    =>  "",
             "username"      =>  false,
             "password"      =>  false,
@@ -51,20 +52,19 @@ class Mailer {
         $this->cc = [];
         $this->bcc = [];
         $this->replyTo = [];
-
     }
 
 
-    public function setSubject($subject) {
-
+    public function setSubject($subject)
+    {
         $this->subject = $subject;
 
         return $this;
     }
 
 
-    public function setRecipient($address) {
-
+    public function setRecipient($address)
+    {
         $this->to = [];
 
         $this->addRecipient($address);
@@ -73,20 +73,20 @@ class Mailer {
     }
 
 
-    public function addRecipient($address) {
-
-        if(!is_array($address)) {
+    public function addRecipient($address)
+    {
+        if (!is_array($address)) {
             $address = [$address => $address];
         }
 
-        $this->to = array_merge($this->to,$address);
+        $this->to = array_merge($this->to, $address);
 
         return $this;
     }
 
 
-    public function setCc($address) {
-
+    public function setCc($address)
+    {
         $this->cc = [];
 
         $this->addCc($address);
@@ -95,20 +95,20 @@ class Mailer {
     }
 
 
-    public function addCc($address) {
-
-        if(!is_array($address)) {
+    public function addCc($address)
+    {
+        if (!is_array($address)) {
             $address = [$address => $address];
         }
 
-        $this->cc = array_merge($this->cc,$address);
+        $this->cc = array_merge($this->cc, $address);
 
         return $this;
     }
 
 
-    public function setBcc($address) {
-
+    public function setBcc($address)
+    {
         $this->bcc = [];
 
         $this->addBcc($address);
@@ -117,20 +117,20 @@ class Mailer {
     }
 
 
-    public function addBcc($address) {
-
-        if(!is_array($address)) {
+    public function addBcc($address)
+    {
+        if (!is_array($address)) {
             $address = [$address => $address];
         }
 
-        $this->bcc = array_merge($this->bcc,$address);
+        $this->bcc = array_merge($this->bcc, $address);
 
         return $this;
     }
 
 
-    public function setReplyTo($address) {
-
+    public function setReplyTo($address)
+    {
         $this->replyTo = [];
 
         $this->addReplyTo($address);
@@ -139,54 +139,54 @@ class Mailer {
     }
 
 
-    public function addReplyTo($address) {
-
-        if(!is_array($address)) {
+    public function addReplyTo($address)
+    {
+        if (!is_array($address)) {
             $address = [$address => $address];
         }
 
-        $this->replyTo = array_merge($this->replyTo,$address);
+        $this->replyTo = array_merge($this->replyTo, $address);
 
         return $this;
     }
 
 
-    public function addContent($content) {
-
+    public function addContent($content)
+    {
         $this->content .= $content;
 
         return $this;
     }
 
 
-    public function addAttachment($path,$filename=false) {
-
+    public function addAttachment($path, $filename = null)
+    {
         $this->attachments[$path] = $filename;
 
         return $this;
     }
 
 
-    public function send() {
-
-        if(count($this->to) < 1) {
+    public function send()
+    {
+        if (count($this->to) < 1) {
             throw new \Exception("No recipients specified to send the email to");
         }
         $keys = array_keys($this->to);
-        if(!$keys[0]) {
+        if (!$keys[0]) {
             throw new \Exception("Invalid recipient specified to send the email to");
         }
 
         # Connect to the smtp server
-        if($this->server) {
-            $smtp = \Swift_SmtpTransport::newInstance($this->server,$this->port,$this->encryption);
+        if ($this->server) {
+            $smtp = \Swift_SmtpTransport::newInstance($this->server, $this->port, $this->encryption);
         } else {
-            $smtp = \Swift_SmtpTransport::newInstance("localhost",25);
+            $smtp = \Swift_SmtpTransport::newInstance("localhost", 25);
         }
-        if($this->username) {
+        if ($this->username) {
             $smtp->setUsername($this->username);
         }
-        if($this->password) {
+        if ($this->password) {
             $smtp->setPassword($this->password);
         }
 
@@ -197,7 +197,7 @@ class Mailer {
         $mail = \Swift_Message::newInstance();
 
         # Set the bounce return path if one has been specified
-        if($this->returnPath) {
+        if ($this->returnPath) {
             $mail->setReturnPath($this->returnPath);
         }
 
@@ -222,30 +222,30 @@ class Mailer {
         $mail->setTo($this->to);
 
         # Add the html body and an alternative plain text version
-        $mail->setBody($html,"text/html");
-        $mail->addPart("To view this message, please use an HTML compatible email viewer.","text/plain");
+        $mail->setBody($html, "text/html");
+        $mail->addPart("To view this message, please use an HTML compatible email viewer.", "text/plain");
 
         # If attachments have been specified then attach them
-        foreach($this->attachments as $path => $filename) {
+        foreach ($this->attachments as $path => $filename) {
             $attachment = \Swift_Attachment::fromPath($path);
-            if($filename) {
+            if ($filename) {
                 $attachment->setFilename($filename);
             }
             $mail->attach($attachment);
         }
 
         # Set the relevant cc
-        if(count($this->cc) > 0) {
+        if (count($this->cc) > 0) {
             $mail->setCc($this->cc);
         }
 
         # Set the relevant bcc
-        if(count($this->bcc) > 0) {
+        if (count($this->bcc) > 0) {
             $mail->setBcc($this->bcc);
         }
 
         # Set the relevant reply-to
-        if(count($this->replyTo) > 0) {
+        if (count($this->replyTo) > 0) {
             $mail->setReplyTo($this->replyTo);
         }
 
@@ -253,8 +253,5 @@ class Mailer {
         $result = $swift->send($mail);
 
         return $result;
-
     }
-
-
 }

@@ -38,9 +38,9 @@ All of the methods that deal with addresses accept $address as either a string o
 Examples
 --------
 
-The Mailer class uses a vendor name space of duncan3dc
+The Mailer class uses a vendor name space of duncan3dc\SwiftMailer
 ```php
-use duncan3dc\Mailer;
+use duncan3dc\SwiftMailer\Mailer;
 ```
 
 -------------------
