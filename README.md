@@ -27,7 +27,7 @@ Public Methods
 * addReplyTo(mixed $address) - Similar to setReplyTo() except it will not clear any previously set reply-to addresses
 * addContent(string $content) - Append content on to the message. All messages use html, and already have headers and a body tag included
 * addAttachment(string $path [,string $filename]) - Attach a file to the message, you can override the filename using the $filename parameter, otherwise it is derived from the $path parameter
-* send() - Send the message. This will throw an exception if no recipients have been set. Exceptions can also be thrown from within the swiftmailer project itself, otherwise this function will return true on sucess and false on a failure that didn't throw an exception
+* send([mixed $address]) - Send the message. This will throw an exception if no recipients have been set. Exceptions can also be thrown from within the swiftmailer project itself, otherwise this function will return true on sucess and false on a failure that didn't throw an exception
 
 
 Email Address Arguments
@@ -48,7 +48,7 @@ use duncan3dc\SwiftMailer\Mailer;
 ```php
 $mailer = new Mailer();
 $mailer->setSubject("Test Email");
-$mailer->setRecipient("name@example.com");
+$mailer->setRecipient(["name@example.com" => "Your Name"]);
 $mailer->addContent("Hello");
 $mailer->send();
 ```
@@ -61,8 +61,7 @@ $mailer = new Mailer([
     "fromName"      =>  "Mr Example",
 ]);
 $mailer->setSubject("Test Email");
-$mailer->setRecipient(["name@example.com" => "Your Name"]);
-$mailer->send();
+$mailer->send("name@example.com");
 ```
 
 -------------------

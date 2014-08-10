@@ -167,8 +167,11 @@ class Mailer
     }
 
 
-    public function send()
+    public function send($address = null)
     {
+        if ($address) {
+            $this->addRecipient($address);
+        }
         if (count($this->to) < 1) {
             throw new \Exception("No recipients specified to send the email to");
         }
