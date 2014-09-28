@@ -3,6 +3,8 @@ swiftmailer
 
 A simple wrapper around swiftmailer for php
 
+[![Build Status](https://travis-ci.org/duncan3dc/swiftmailer.svg?branch=master)](https://travis-ci.org/duncan3dc/swiftmailer)
+
 
 Constructor Arguments
 ---------------------
