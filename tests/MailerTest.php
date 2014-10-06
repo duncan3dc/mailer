@@ -173,4 +173,14 @@ class MailerTest extends \PHPUnit_Framework_TestCase
         $mailer->addContent($content2);
         $this->checkProperty($mailer, "content", $content1 . $content2);
     }
+
+
+    public function testSend()
+    {
+        $result = (new Mailer)
+            ->setSubject("PHPUnit Test")
+            ->addContent("Please ignore this message")
+            ->send("test@example.com");
+        $this->assertSame(1, $result);
+    }
 }
