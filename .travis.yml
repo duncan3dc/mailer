@@ -10,8 +10,8 @@ install:
   - composer install
 
 before_script:
-  - gem install mailcatcher
-  - mailcatcher --smtp-port 25
+  - gem install --quiet mailcatcher
+  - mailcatcher
 
 script:
   - phpunit tests

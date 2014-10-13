@@ -177,7 +177,8 @@ class MailerTest extends \PHPUnit_Framework_TestCase
 
     public function testSend()
     {
-        $result = (new Mailer)
+        $port = getenv("TRAVIS") ? 1025 : 25;
+        $result = (new Mailer(["local-port" => $port]))
             ->setSubject("PHPUnit Test")
             ->addContent("Please ignore this message")
             ->send("test@example.com");

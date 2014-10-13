@@ -198,7 +198,7 @@ class Mailer
         if ($this->server) {
             $smtp = \Swift_SmtpTransport::newInstance($this->server, $this->port, $this->encryption);
         } else {
-            $smtp = \Swift_SmtpTransport::newInstance("localhost", $this->localport);
+            $smtp = \Swift_SmtpTransport::newInstance("localhost", $this->localPort);
         }
         if ($this->username) {
             $smtp->setUsername($this->username);
