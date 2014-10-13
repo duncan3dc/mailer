@@ -9,6 +9,10 @@ php:
 install:
   - composer install
 
+before_script:
+  - gem install mailcatcher
+  - mailcatcher --smtp-port 25
+
 script:
   - phpunit tests
   - ./tests/lint.sh
