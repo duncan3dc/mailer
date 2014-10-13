@@ -7,18 +7,27 @@ use duncan3dc\Helpers\Helper;
 class Mailer
 {
     protected $server;
+    protected $username;
+    protected $password;
+
     protected $fromAddress;
     protected $fromName;
 
-    protected $content;
+    protected $encryption;
+    protected $port;
+    protected $localPort;
+
+    protected $returnPath;
 
     protected $to;
     protected $subject;
+    protected $content;
 
     protected $attachments;
 
     protected $cc;
     protected $bcc;
+    protected $replyTo;
 
 
     public function __construct($options = null)
@@ -31,17 +40,22 @@ class Mailer
             "fromName"      =>  "",
             "encryption"    =>  "ssl",
             "port"          =>  465,
+            "local-port"    =>  25,
             "returnPath"    =>  false,
         ]);
 
-        $this->server = $options["smtpServer"];
-        $this->username = $options["username"];
-        $this->password = $options["password"];
-        $this->fromAddress = $options["fromAddress"];
-        $this->fromName = $options["fromName"];
-        $this->encryption = $options["encryption"];
-        $this->port = $options["port"];
-        $this->returnPath = $options["returnPath"];
+        $this->server       =   $options["smtpServer"];
+        $this->username     =   $options["username"];
+        $this->password     =   $options["password"];
+
+        $this->fromAddress  =   $options["fromAddress"];
+        $this->fromName     =   $options["fromName"];
+
+        $this->encryption   =   $options["encryption"];
+        $this->port         =   $options["port"];
+        $this->localPort    =   $options["local-port"];
+
+        $this->returnPath   =   $options["returnPath"];
 
         $this->to = [];
         $this->subject = "";
@@ -184,7 +198,7 @@ class Mailer
         if ($this->server) {
             $smtp = \Swift_SmtpTransport::newInstance($this->server, $this->port, $this->encryption);
         } else {
-            $smtp = \Swift_SmtpTransport::newInstance("localhost", 25);
+            $smtp = \Swift_SmtpTransport::newInstance("localhost", $this->localport);
         }
         if ($this->username) {
             $smtp->setUsername($this->username);
