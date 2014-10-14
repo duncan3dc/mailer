@@ -3,6 +3,7 @@
 namespace duncan3dc\SwiftMailer;
 
 use duncan3dc\Helpers\Helper;
+use duncan3dc\Laravel\Blade;
 
 class Mailer
 {
@@ -294,9 +295,8 @@ class Mailer
      */
     public function setContent($content)
     {
-        $this->content = $content;
-
-        return $this;
+        $this->content = "";
+        return $this->addContent($content);
     }
 
 
@@ -312,6 +312,37 @@ class Mailer
         $this->content .= $content;
 
         return $this;
+    }
+
+
+    /**
+     * Set the content of the body of the message, discarding any previously added content.
+     *
+     * @param string The html content to add
+     *
+     * @return Mailer
+     */
+    public function setView($view, array $params = null)
+    {
+        $this->content = "";
+        return $this->addView($view, $params);
+    }
+
+
+    /**
+     * Add content to the body of the message.
+     *
+     * @param string The html content to add
+     *
+     * @return Mailer
+     */
+    public function addView($view, array $params = null)
+    {
+        if (!is_array($params)) {
+            $params = [];
+        }
+        $content = Blade::make($view, $params);
+        return $this->addContent($content);
     }
 
 

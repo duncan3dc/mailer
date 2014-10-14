@@ -2,8 +2,16 @@
 
 namespace duncan3dc\SwiftMailer;
 
+use duncan3dc\Laravel\Blade;
+
 class MailerTest extends \PHPUnit_Framework_TestCase
 {
+
+    public function __construct()
+    {
+        Blade::addPath(__DIR__ . "/views");
+    }
+
 
     private function getProperty(Mailer $mailer, $name)
     {
@@ -155,6 +163,16 @@ class MailerTest extends \PHPUnit_Framework_TestCase
     }
 
 
+    public function testSetContent1()
+    {
+        $content = "Test Content";
+        $mailer = new Mailer;
+        $mailer->addContent($content);
+        $mailer->setContent($content);
+        $this->checkProperty($mailer, "content", $content);
+    }
+
+
     public function testAddContent1()
     {
         $content = "Test Content";
@@ -172,6 +190,34 @@ class MailerTest extends \PHPUnit_Framework_TestCase
         $mailer->addContent($content1);
         $mailer->addContent($content2);
         $this->checkProperty($mailer, "content", $content1 . $content2);
+    }
+
+
+    public function testSetView()
+    {
+        $mailer = new Mailer;
+        $mailer->addView("test1");
+        $mailer->setView("test1");
+        $this->checkProperty($mailer, "content", file_get_contents(__DIR__ . "/views/test1.blade.php"));
+    }
+
+
+    public function testAddView1()
+    {
+        $content = "Test Content";
+        $mailer = new Mailer;
+        $mailer->addView("test2", ["title" => "Test Title"]);
+        $this->checkProperty($mailer, "content", file_get_contents(__DIR__ . "/views/test2.html"));
+    }
+
+
+    public function testAddView2()
+    {
+        $mailer = new Mailer;
+        $mailer->addView("test1");
+        $mailer->addView("test1");
+        $content = file_get_contents(__DIR__ . "/views/test1.blade.php");
+        $this->checkProperty($mailer, "content", $content . $content);
     }
 
 
