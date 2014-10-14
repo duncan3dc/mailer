@@ -6,27 +6,84 @@ use duncan3dc\Helpers\Helper;
 
 class Mailer
 {
+    /**
+     * @var string The hostname or ip address of the server to send the message from
+     */
     protected $server;
+
+    /**
+     * @var string The username to use for smtp authorisation
+     */
     protected $username;
+
+    /**
+     * @var string The password to use for smtp authorisation
+     */
     protected $password;
 
+    /**
+     * @var string The address to send the message from
+     */
     protected $fromAddress;
+
+    /**
+     * @var string The name to send the message from
+     */
     protected $fromName;
 
+    /**
+     * @var string The type of encryption to use
+     */
     protected $encryption;
+
+    /**
+     * @var int The port to connect the smtp server on
+     */
     protected $port;
+
+    /**
+     * @var int The port to connect to the local smtp server on
+     */
     protected $localPort;
 
+    /**
+     * @var string The address to specify as the return path for bounces
+     */
     protected $returnPath;
 
+    /**
+     * @var array The addresses to send the message to
+     */
     protected $to;
+
+    /**
+     * @var string The subject to put on the message
+     */
     protected $subject;
+
+    /**
+     * @var string The html content to include in the message
+     */
     protected $content;
 
+    /**
+     * @var array Any attachments to include in the message
+     */
     protected $attachments;
 
+    /**
+     * @var array The addresses to cc on the message
+     */
     protected $cc;
+
+    /**
+     * @var array The addresses to bcc on the message
+     */
     protected $bcc;
+
+    /**
+     * @var array The addresses to use as the reply to for the message
+     */
     protected $replyTo;
 
 
@@ -69,6 +126,13 @@ class Mailer
     }
 
 
+    /**
+     * Set the subject of the message, discarding any previously set subject.
+     *
+     * @param string The subject to use
+     *
+     * @return Mailer
+     */
     public function setSubject($subject)
     {
         $this->subject = $subject;
@@ -77,6 +141,13 @@ class Mailer
     }
 
 
+    /**
+     * Set the recipient of the message, discarding any previously defined recipients.
+     *
+     * @param string|array An address, either as a string of just the email address, or an array where the key is the address and the value is the recipient's name
+     *
+     * @return Mailer
+     */
     public function setRecipient($address)
     {
         $this->to = [];
@@ -87,6 +158,13 @@ class Mailer
     }
 
 
+    /**
+     * Add a recipient to the message.
+     *
+     * @param string|array An address, either as a string of just the email address, or an array where the key is the address and the value is the recipient's name
+     *
+     * @return Mailer
+     */
     public function addRecipient($address)
     {
         if (!is_array($address)) {
@@ -99,6 +177,13 @@ class Mailer
     }
 
 
+    /**
+     * Set the cc for the message, discarding any previously defined cc addresses.
+     *
+     * @param string|array An address, either as a string of just the email address, or an array where the key is the address and the value is the recipient's name
+     *
+     * @return Mailer
+     */
     public function setCc($address)
     {
         $this->cc = [];
@@ -109,6 +194,13 @@ class Mailer
     }
 
 
+    /**
+     * Add a cc to the message.
+     *
+     * @param string|array An address, either as a string of just the email address, or an array where the key is the address and the value is the recipient's name
+     *
+     * @return Mailer
+     */
     public function addCc($address)
     {
         if (!is_array($address)) {
@@ -121,6 +213,13 @@ class Mailer
     }
 
 
+    /**
+     * Set the bcc for the message, discarding any previously defined bcc addresses.
+     *
+     * @param string|array An address, either as a string of just the email address, or an array where the key is the address and the value is the recipient's name
+     *
+     * @return Mailer
+     */
     public function setBcc($address)
     {
         $this->bcc = [];
@@ -131,6 +230,13 @@ class Mailer
     }
 
 
+    /**
+     * Add a bcc to the message.
+     *
+     * @param string|array An address, either as a string of just the email address, or an array where the key is the address and the value is the recipient's name
+     *
+     * @return Mailer
+     */
     public function addBcc($address)
     {
         if (!is_array($address)) {
@@ -143,6 +249,13 @@ class Mailer
     }
 
 
+    /**
+     * Set the reply to address for the message, discarding any previously defined reply to addresses.
+     *
+     * @param string|array An address, either as a string of just the email address, or an array where the key is the address and the value is the recipient's name
+     *
+     * @return Mailer
+     */
     public function setReplyTo($address)
     {
         $this->replyTo = [];
@@ -153,6 +266,13 @@ class Mailer
     }
 
 
+    /**
+     * Add a reply to address to the message.
+     *
+     * @param string|array An address, either as a string of just the email address, or an array where the key is the address and the value is the recipient's name
+     *
+     * @return Mailer
+     */
     public function addReplyTo($address)
     {
         if (!is_array($address)) {
@@ -165,6 +285,28 @@ class Mailer
     }
 
 
+    /**
+     * Set the content of the body of the message, discarding any previously added content.
+     *
+     * @param string The html content to add
+     *
+     * @return Mailer
+     */
+    public function setContent($content)
+    {
+        $this->content = $content;
+
+        return $this;
+    }
+
+
+    /**
+     * Add content to the body of the message.
+     *
+     * @param string The html content to add
+     *
+     * @return Mailer
+     */
     public function addContent($content)
     {
         $this->content .= $content;
@@ -173,6 +315,14 @@ class Mailer
     }
 
 
+    /**
+     * Add an attachment to the message.
+     *
+     * @param string The full path to the file to attach
+     * @param string An optional filename to use (instead of the filename from the path)
+     *
+     * @return Mailer
+     */
     public function addAttachment($path, $filename = null)
     {
         $this->attachments[$path] = $filename;
@@ -181,6 +331,13 @@ class Mailer
     }
 
 
+    /**
+     * Send the message.
+     *
+     * @param string|array An additional to address for the message, either as a string of just the email address, or an array where the key is the address and the value is the recipient's name
+     *
+     * @return int (number of successful recipients)
+     */
     public function send($address = null)
     {
         if ($address) {
