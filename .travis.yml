@@ -22,7 +22,7 @@ before_script:
   - mailcatcher
 
 script:
-  - phpunit tests
+  - phpunit
   - ./tests/lint.sh
 
 git:
