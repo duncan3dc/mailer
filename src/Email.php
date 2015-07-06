@@ -2,7 +2,6 @@
 
 namespace duncan3dc\SwiftMailer;
 
-use duncan3dc\Helpers\Helper;
 use duncan3dc\Laravel\Blade;
 
 class Email
