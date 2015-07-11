@@ -7,6 +7,40 @@ class Mailer extends Email
 
     public function __construct(array $options = null)
     {
-        parent::__construct(new Server($options));
+        if (!is_array($options)) {
+            $options = [];
+        }
+
+        if (empty($options["hostname"])) {
+            $hostname = "localhost";
+        } else {
+            $hostname = $options["hostname"];
+        }
+
+        if ($hostname === "localhost") {
+            $port = isset($options["local-port"]) ? $options["local-port"] : 25;
+        } else {
+            $port = isset($options["port"]) ? $options["port"] : 465;
+        }
+
+        $server = new Server($hostname, $port);
+
+        if (!empty($options["username"]) || !empty($options["password"])) {
+            $server->setCredentials($options["username"], $options["password"]);
+        }
+
+        if (!empty($options["fromAddress"])) {
+            $server->setFromAddress($options["fromAddress"], $options["fromName"]);
+        }
+
+        if (!empty($options["encryption"])) {
+            $server->setEncryptionMethod($options["encryption"]);
+        }
+
+        if (!empty($options["returnPath"])) {
+            $server->setReturnPath($options["returnPath"]);
+        }
+
+        parent::__construct($server);
     }
 }

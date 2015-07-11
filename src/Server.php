@@ -2,87 +2,146 @@
 
 namespace duncan3dc\SwiftMailer;
 
-use duncan3dc\Helpers\Helper;
-
 class Server
 {
     /**
-     * @var string $hostname The hostname or ip address of the server to send the message from
+     * @var string $hostname The hostname or ip address of the server to send the message from.
      */
-    protected $hostname;
+    protected $hostname = "localhost";
 
     /**
-     * @var \Swift_Mailer $mailer An instance of the swift mailer class
+     * @var \Swift_Mailer $mailer An instance of the swift mailer class.
      */
     protected $mailer;
 
     /**
-     * @var string $username The username to use for smtp authorisation
+     * @var string $username The username to use for smtp authorisation.
      */
     protected $username;
 
     /**
-     * @var string $password The password to use for smtp authorisation
+     * @var string $password The password to use for smtp authorisation.
      */
     protected $password;
 
     /**
-     * @var string $fromAddress The address to send the message from
+     * @var string $fromAddress The address to send the message from.
      */
-    protected $fromAddress;
+    protected $fromAddress = "no-reply@example.com";
 
     /**
-     * @var string $fromName The name to send the message from
+     * @var string $fromName The name to send the message from.
      */
     protected $fromName;
 
     /**
-     * @var string $encryption The type of encryption to use
+     * @var string $encryption The type of encryption to use.
      */
     protected $encryption;
 
     /**
-     * @var int $port The port to connect the smtp server on
+     * @var int $port The port to connect the smtp server on.
      */
     protected $port;
 
     /**
-     * @var int $localPort The port to connect to the local smtp server on
-     */
-    protected $localPort;
-
-    /**
-     * @var string $returnPath The address to specify as the return path for bounces
+     * @var string $returnPath The address to specify as the return path for bounces.
      */
     protected $returnPath;
 
 
-    public function __construct($options = null)
+    /**
+     * Create a new instance.
+     *
+     * @param string $hostname The hostname of the server
+     * @param int $pot The port to connect to the server on
+     */
+    public function __construct($hostname = null, $port = null)
     {
-        $options = Helper::getOptions($options, [
-            "hostname"      =>  "",
-            "username"      =>  false,
-            "password"      =>  false,
-            "fromAddress"   =>  "no-reply@example.com",
-            "fromName"      =>  "",
-            "encryption"    =>  "ssl",
-            "port"          =>  465,
-            "local-port"    =>  25,
-            "returnPath"    =>  false,
-        ]);
+        if ($hostname !== null) {
+            $this->hostname = $hostname;
+        }
+        if ($port !== null) {
+            $this->port = $port;
+        }
 
-        $this->hostname     =   $options["hostname"];
-        $this->username     =   $options["username"];
-        $this->password     =   $options["password"];
+        if ($hostname === "localhost") {
+            $this->encryption = null;
+            if ($port === null) {
+                $this->port = 25;
+            }
+        } else {
+            $this->encryption = "ssl";
+            if ($port === null) {
+                $this->port = 465;
+            }
+        }
+    }
 
-        $this->fromAddress  =   $options["fromAddress"];
-        $this->fromName     =   $options["fromName"];
 
-        $this->encryption   =   $options["encryption"];
-        $this->port         =   $options["port"];
-        $this->localPort    =   $options["local-port"];
+    /**
+     * Set the credentials used to authorise on the smtp server.
+     *
+     * @param string $username The username to use
+     * @param string $password The password to use
+     *
+     * @return static
+     */
+    public function setCredentials($username, $password)
+    {
+        $this->username = $username;
+        $this->password = $password;
 
-        $this->returnPath   =   $options["returnPath"];
+        return $this;
+    }
+
+
+    /**
+     * Set the from address to use in messages from this server.
+     *
+     * @param string $address The email address to use
+     * @param string $name The name to use
+     *
+     * @return static
+     */
+    public function setFromAddress($address, $name = null)
+    {
+        $this->fromAddress = $address;
+        if ($name !== null) {
+            $this->fromName = $name;
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * Set the encryption method used by this server.
+     *
+     * @param string $method The encryption method to use
+     *
+     * @return static
+     */
+    public function setEncryptionMethod($method)
+    {
+        $this->encryption = $method;
+
+        return $this;
+    }
+
+
+    /**
+     * Set the return path used by this server.
+     *
+     * @param string $path The path to use
+     *
+     * @return static
+     */
+    public function setReturnPath($path)
+    {
+        $this->returnPath = $path;
+
+        return $this;
     }
 
 
@@ -97,15 +156,12 @@ class Server
             return $this->mailer;
         }
 
-        if ($this->hostname) {
-            $smtp = \Swift_SmtpTransport::newInstance($this->hostname, $this->port, $this->encryption);
-        } else {
-            $smtp = \Swift_SmtpTransport::newInstance("localhost", $this->localPort);
-        }
-        if ($this->username) {
+        $smtp = \Swift_SmtpTransport::newInstance($this->hostname, $this->port, $this->encryption);
+
+        if ($this->username !== null) {
             $smtp->setUsername($this->username);
         }
-        if ($this->password) {
+        if ($this->password !== null) {
             $smtp->setPassword($this->password);
         }
 
