@@ -146,6 +146,17 @@ class Server
 
 
     /**
+     * Create a new instance of the Email class using this server.
+     *
+     * @return Email
+     */
+    public function createMessage()
+    {
+        return new Email($this);
+    }
+
+
+    /**
      * Get a singleton of the swift mailer class.
      *
      * @return \Swift_Mailer
