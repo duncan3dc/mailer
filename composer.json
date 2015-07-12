@@ -2,7 +2,7 @@
     "name": "duncan3dc/swiftmailer",
     "type": "library",
     "description": "A simple wrapper around swiftmailer",
-    "keywords": ["swiftmailer","email","simple","mailer"],
+    "keywords": ["swiftmailer", "email", "simple", "mailer"],
     "homepage": "https://github.com/duncan3dc/swiftmailer",
     "license": "Apache-2.0",
     "authors": [{
@@ -12,9 +12,9 @@
         "role": "Developer"
     }],
     "require": {
-        "duncan3dc/blade": ">=2.0.0",
-        "swiftmailer/swiftmailer": "5.3.*",
-        "php": ">=5.4.0"
+        "duncan3dc/blade": "^2.2",
+        "swiftmailer/swiftmailer": "^5.4",
+        "php": ">=5.5.0"
     },
     "autoload": {
         "psr-4": {"duncan3dc\\SwiftMailer\\": "src/"}
