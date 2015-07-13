@@ -11,10 +11,10 @@ class Mailer extends Email
             $options = [];
         }
 
-        if (empty($options["hostname"])) {
+        if (empty($options["smtpServer"])) {
             $hostname = "localhost";
         } else {
-            $hostname = $options["hostname"];
+            $hostname = $options["smtpServer"];
         }
 
         if ($hostname === "localhost") {
