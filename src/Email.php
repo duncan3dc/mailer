@@ -103,17 +103,37 @@ class Email
 
 
     /**
+     * Convert the passed address and optional name into an array format that swiftmailer expects.
+     *
+     * @param string $address The email address
+     * @param string $name The name used for the email address
+     *
+     * @return array
+     */
+    protected function getAddress($address, $name = null)
+    {
+        if (!is_array($address)) {
+            if ($name === null) {
+                $name = $address;
+            }
+            $address = [$address => $name];
+        }
+
+        return $address;
+    }
+
+
+    /**
      * Set the recipient of the message, discarding any previously defined recipients.
      *
-     * @param string|array $address An address, either as a string of just the email address, or an array where the key is the address and the value is the recipient's name
+     * @param string $address The email address of the recipient
+     * @param string $name The name of the recipient
      *
      * @return static
      */
-    public function setRecipient($address)
+    public function setRecipient($address, $name = null)
     {
-        $this->to = [];
-
-        $this->addRecipient($address);
+        $this->to = $this->getaddress($address, $name);
 
         return $this;
     }
@@ -122,17 +142,14 @@ class Email
     /**
      * Add a recipient to the message.
      *
-     * @param string|array $address An address, either as a string of just the email address, or an array where the key is the address and the value is the recipient's name
+     * @param string $address The email address of the recipient
+     * @param string $name The name of the recipient
      *
      * @return static
      */
-    public function addRecipient($address)
+    public function addRecipient($address, $name = null)
     {
-        if (!is_array($address)) {
-            $address = [$address => $address];
-        }
-
-        $this->to = array_merge($this->to, $address);
+        $this->to = array_merge($this->to, $this->getaddress($address, $name));
 
         return $this;
     }
@@ -141,15 +158,14 @@ class Email
     /**
      * Set the cc for the message, discarding any previously defined cc addresses.
      *
-     * @param string|array $address An address, either as a string of just the email address, or an array where the key is the address and the value is the recipient's name
+     * @param string $address The email address of the recipient
+     * @param string $name The name of the recipient
      *
      * @return static
      */
-    public function setCc($address)
+    public function setCc($address, $name = null)
     {
-        $this->cc = [];
-
-        $this->addCc($address);
+        $this->cc = $this->getaddress($address, $name);
 
         return $this;
     }
@@ -158,17 +174,14 @@ class Email
     /**
      * Add a cc to the message.
      *
-     * @param string|array $address An address, either as a string of just the email address, or an array where the key is the address and the value is the recipient's name
+     * @param string $address The email address of the recipient
+     * @param string $name The name of the recipient
      *
      * @return static
      */
-    public function addCc($address)
+    public function addCc($address, $name = null)
     {
-        if (!is_array($address)) {
-            $address = [$address => $address];
-        }
-
-        $this->cc = array_merge($this->cc, $address);
+        $this->cc = array_merge($this->cc, $this->getaddress($address, $name));
 
         return $this;
     }
@@ -177,15 +190,14 @@ class Email
     /**
      * Set the bcc for the message, discarding any previously defined bcc addresses.
      *
-     * @param string|array $address An address, either as a string of just the email address, or an array where the key is the address and the value is the recipient's name
+     * @param string $address The email address of the recipient
+     * @param string $name The name of the recipient
      *
      * @return static
      */
-    public function setBcc($address)
+    public function setBcc($address, $name = null)
     {
-        $this->bcc = [];
-
-        $this->addBcc($address);
+        $this->bcc = $this->getaddress($address, $name);
 
         return $this;
     }
@@ -194,53 +206,30 @@ class Email
     /**
      * Add a bcc to the message.
      *
-     * @param string|array $address An address, either as a string of just the email address, or an array where the key is the address and the value is the recipient's name
+     * @param string $address The email address of the recipient
+     * @param string $name The name of the recipient
      *
      * @return static
      */
-    public function addBcc($address)
+    public function addBcc($address, $name = null)
     {
-        if (!is_array($address)) {
-            $address = [$address => $address];
-        }
-
-        $this->bcc = array_merge($this->bcc, $address);
+        $this->bcc = array_merge($this->bcc, $this->getaddress($address, $name));
 
         return $this;
     }
 
 
     /**
-     * Set the reply to address for the message, discarding any previously defined reply to addresses.
+     * Set the reply to address for the message.
      *
-     * @param string|array $address An address, either as a string of just the email address, or an array where the key is the address and the value is the recipient's name
-     *
-     * @return static
-     */
-    public function setReplyTo($address)
-    {
-        $this->replyTo = [];
-
-        $this->addReplyTo($address);
-
-        return $this;
-    }
-
-
-    /**
-     * Add a reply to address to the message.
-     *
-     * @param string|array $address An address, either as a string of just the email address, or an array where the key is the address and the value is the recipient's name
+     * @param string $address The email address of the recipient
+     * @param string $name The name of the recipient
      *
      * @return static
      */
-    public function addReplyTo($address)
+    public function setReplyTo($address, $name = null)
     {
-        if (!is_array($address)) {
-            $address = [$address => $address];
-        }
-
-        $this->replyTo = array_merge($this->replyTo, $address);
+        $this->replyTo = $this->getaddress($address, $name);
 
         return $this;
     }
@@ -255,8 +244,9 @@ class Email
      */
     public function setContent($content)
     {
-        $this->content = "";
-        return $this->addContent($content);
+        $this->content = $content;
+
+        return $this;
     }
 
 
@@ -327,15 +317,17 @@ class Email
     /**
      * Send the message.
      *
-     * @param string|array $address An additional to address for the message, either as a string of just the email address, or an array where the key is the address and the value is the recipient's name
+     * @param string $address The email address of the recipient
+     * @param string $name The name of the recipient
      *
      * @return int (number of successful recipients)
      */
-    public function send($address = null)
+    public function send($address = null, $name = null)
     {
-        if ($address) {
-            $this->addRecipient($address);
+        if ($address !== null) {
+            $this->addRecipient($address, $name);
         }
+
         if (count($this->to) < 1) {
             throw new \Exception("No recipients specified to send the email to");
         }
