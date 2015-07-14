@@ -23,22 +23,17 @@ The constructor accepts an array of options as the only parameter. This paramete
 Public Methods
 --------------
 * setSubject(string $subject): Mailer - Set the subject of the message, clears any previously set subject
-* setRecipient(mixed $address): Mailer - Set the recipient of the message, clears any previously set recipients. See [Email Address Arguments](#email-address-arguments)
-* addRecipient(mixed $address): Mailer - Similar to setRecipient() except it will not clear any previously set recipients
-* setCc(mixed $address): Mailer - Similar to setRecipient() except it deals with the CC section of the message
-* addCc(mixed $address): Mailer - Similar to setCc() except it will not clear any previously set CC addresses
-* setBcc(mixed $address): Mailer - Similar to setCc() except it deals with the BCC section of the message
-* addBcc(mixed $address): Mailer - Similar to setBcc() except it will not clear any previously set BCC addresses
-* setReplyTo(mixed $address): Mailer - Set the reply-to header of the message to request that email clients reply to this address instead of the sender's address
-* addReplyTo(mixed $address): Mailer - Similar to setReplyTo() except it will not clear any previously set reply-to addresses
-* addContent(string $content): Mailer - Append content on to the message. All messages use html, and already have headers and a body tag included
+* setRecipient(string $address[, string $name]): Mailer - Set the recipient of the message, clears any previously set recipients
+* addRecipient(string $address[, string $name]): Mailer - Similar to setRecipient() except it will not clear any previously set recipients
+* setCc(string $address[, string $name]): Mailer - Similar to setRecipient() except it deals with the CC section of the message
+* addCc(string $address[, string $name]): Mailer - Similar to setCc() except it will not clear any previously set CC addresses
+* setBcc(string $address[, string $name]): Mailer - Similar to setCc() except it deals with the BCC section of the message
+* addBcc(string $address[, string $name]): Mailer - Similar to setBcc() except it will not clear any previously set BCC addresses
+* setReplyTo(string $address[, string $name]): Mailer - Set the reply-to header of the message to request that email clients reply to this address instead of the sender's address
+* setContent(string $content): Mailer - Discard any previous content and use the content provided. All messages use html, and already have headers and a body tag included
+* addContent(string $content): Mailer - Append content on to the message
 * addAttachment(string $path [,string $filename]): Mailer - Attach a file to the message, you can override the filename using the $filename parameter, otherwise it is derived from the $path parameter
 * send(): boolean - Send the message. This will throw an exception if no recipients have been set. Exceptions can also be thrown from within the swiftmailer project itself, otherwise this function will return true on sucess and false on a failure that didn't throw an exception
-
-
-Email Address Arguments
------------------------
-All of the methods that deal with addresses accept $address as either a string or an array. When using a string then it is just the email address, when using an array the key should be the email address, and the value should be the name of the recipient
 
 
 Examples
