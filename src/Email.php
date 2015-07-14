@@ -12,11 +12,6 @@ class Email
     protected $server;
 
     /**
-     * @var array $to The addresses to send the message to
-     */
-    protected $to = [];
-
-    /**
      * @var string $subject The subject to put on the message
      */
     protected $subject = "";
@@ -32,6 +27,11 @@ class Email
     protected $attachments = [];
 
     /**
+     * @var array $to The addresses to send the message to
+     */
+    protected $to = [];
+
+    /**
      * @var array $cc The addresses to cc on the message
      */
     protected $cc = [];
@@ -42,14 +42,48 @@ class Email
     protected $bcc = [];
 
     /**
-     * @var array $replyTo The addresses to use as the reply to for the message
+     * @var array $replyTo The address to use as the reply to for the message
      */
     protected $replyTo = [];
 
+    /**
+     * @var string $fromAddress The address to send the message from.
+     */
+    protected $fromAddress = "no-reply@example.com";
 
+    /**
+     * @var string $fromName The name to send the message from.
+     */
+    protected $fromName = "";
+
+
+    /**
+     * Create a new instance of the Email class using the specified server.
+     *
+     * @param Server $server The Server to send emails using
+     */
     public function __construct(Server $server)
     {
         $this->server = $server;
+    }
+
+
+    /**
+     * Set the address to send emails from.
+     *
+     * @param string $address The address to send the message from
+     * @param string $name The name to send the message from
+     *
+     * @return static
+     */
+    public function setFromAddress($address, $name = null)
+    {
+        $this->fromAddress = $address;
+        if ($name !== null) {
+            $this->fromName = $name;
+        }
+
+        return $this;
     }
 
 
@@ -356,6 +390,9 @@ class Email
         if (count($this->replyTo) > 0) {
             $message->setReplyTo($this->replyTo);
         }
+
+        # Set the from address
+        $message->setFrom([$this->fromAddress => $this->fromName]);
 
         # Send the message
         return $this->server->send($message);

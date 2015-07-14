@@ -25,16 +25,6 @@ class Server
     protected $password;
 
     /**
-     * @var string $fromAddress The address to send the message from.
-     */
-    protected $fromAddress = "no-reply@example.com";
-
-    /**
-     * @var string $fromName The name to send the message from.
-     */
-    protected $fromName;
-
-    /**
      * @var string $encryption The type of encryption to use.
      */
     protected $encryption;
@@ -91,25 +81,6 @@ class Server
     {
         $this->username = $username;
         $this->password = $password;
-
-        return $this;
-    }
-
-
-    /**
-     * Set the from address to use in messages from this server.
-     *
-     * @param string $address The email address to use
-     * @param string $name The name to use
-     *
-     * @return static
-     */
-    public function setFromAddress($address, $name = null)
-    {
-        $this->fromAddress = $address;
-        if ($name !== null) {
-            $this->fromName = $name;
-        }
 
         return $this;
     }
@@ -191,9 +162,6 @@ class Server
      */
     public function send(\Swift_Message $message)
     {
-        # Set the from address
-        $message->setFrom([$this->fromAddress => $this->fromName]);
-
         # Set the bounce return path if one has been specified
         if ($this->returnPath) {
             $message->setReturnPath($this->returnPath);

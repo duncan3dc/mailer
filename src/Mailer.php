@@ -29,10 +29,6 @@ class Mailer extends Email
             $server->setCredentials($options["username"], $options["password"]);
         }
 
-        if (!empty($options["fromAddress"])) {
-            $server->setFromAddress($options["fromAddress"], $options["fromName"]);
-        }
-
         if (!empty($options["encryption"])) {
             $server->setEncryptionMethod($options["encryption"]);
         }
@@ -42,5 +38,9 @@ class Mailer extends Email
         }
 
         parent::__construct($server);
+
+        if (!empty($options["fromAddress"])) {
+            $this->setFromAddress($options["fromAddress"], $options["fromName"]);
+        }
     }
 }
