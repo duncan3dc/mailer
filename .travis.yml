@@ -19,7 +19,7 @@ before_script:
   - mailcatcher
 
 script:
-  - phpunit
+  - ./vendor/bin/phpunit
   - ./tests/lint.sh
 
 git:
