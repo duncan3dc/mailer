@@ -12,7 +12,7 @@
         "role": "Developer"
     }],
     "require": {
-        "duncan3dc/blade": "^2.2",
+        "duncan3dc/blade": "^2.2|^3.0",
         "swiftmailer/swiftmailer": "^5.4",
         "php": ">=5.6"
     },
