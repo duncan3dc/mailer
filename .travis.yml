@@ -11,7 +11,7 @@ env:
   - COMPOSER_OPTS="--prefer-lowest"
 
 install:
-  - composer self-update
+  - composer self-update --snapshot
   - composer update $COMPOSER_OPTS
 
 before_script:
