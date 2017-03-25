@@ -1,8 +1,9 @@
 <?php
 
-namespace duncan3dc\SwiftMailer;
+namespace duncan3dc\SwiftMailerTests;
 
 use duncan3dc\Laravel\Blade;
+use duncan3dc\SwiftMailer\Mailer;
 
 class MailerTest extends \PHPUnit_Framework_TestCase
 {
@@ -15,7 +16,7 @@ class MailerTest extends \PHPUnit_Framework_TestCase
 
     private function getProperty(Mailer $mailer, $name)
     {
-        $reflection = new \ReflectionClass(__NAMESPACE__ . "\\Mailer");
+        $reflection = new \ReflectionClass(Mailer::class);
         $property = $reflection->getProperty($name);
         $property->setAccessible(true);
         return $property->getValue($mailer);
