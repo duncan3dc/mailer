@@ -3,222 +3,164 @@
 namespace duncan3dc\SwiftMailerTests;
 
 use duncan3dc\Laravel\Blade;
+use duncan3dc\ObjectIntruder\Intruder;
 use duncan3dc\SwiftMailer\Mailer;
 
 class MailerTest extends \PHPUnit_Framework_TestCase
 {
+    private $mailer;
 
-    public function __construct()
+    public function setUp()
     {
+        $mailer = new Mailer;
+        $this->mailer = new Intruder($mailer);
+
         Blade::addPath(__DIR__ . "/views");
-    }
-
-
-    private function getProperty(Mailer $mailer, $name)
-    {
-        $reflection = new \ReflectionClass(Mailer::class);
-        $property = $reflection->getProperty($name);
-        $property->setAccessible(true);
-        return $property->getValue($mailer);
-    }
-
-
-    private function checkProperty(Mailer $mailer, $name, $check)
-    {
-        $result = $this->getProperty($mailer, $name);
-        $this->assertSame($check, $result);
     }
 
 
     public function testSetSubject()
     {
-        $subject = "Test Subject";
-        $mailer = new Mailer;
-        $mailer->setSubject($subject);
-        $this->checkProperty($mailer, "subject", $subject);
+        $this->mailer->setSubject("Test Subject");
+        $this->assertSame("Test Subject", $this->mailer->subject);
     }
 
 
     public function testSetRecipient1()
     {
-        $mailer = new Mailer;
-        $mailer->setRecipient("test@example.com");
-        $this->checkProperty($mailer, "to", ["test@example.com" => "test@example.com"]);
+        $this->mailer->setRecipient("test@example.com");
+        $this->assertSame(["test@example.com" => "test@example.com"], $this->mailer->to);
     }
-
-
     public function testSetRecipient2()
     {
-        $address = ["test@example.com" => "Example User"];
-        $mailer = new Mailer;
-        $mailer->setRecipient($address);
-        $this->checkProperty($mailer, "to", $address);
+        $this->mailer->setRecipient(["test@example.com" => "Example User"]);
+        $this->assertSame(["test@example.com" => "Example User"], $this->mailer->to);
     }
-
-
     public function testSetRecipient3()
     {
-        $address = ["test@example.com" => "Example User"];
-        $mailer = new Mailer;
-        $mailer->setRecipient("test2@example.com");
-        $mailer->setRecipient($address);
-        $this->checkProperty($mailer, "to", $address);
+        $this->mailer->setRecipient("test2@example.com");
+        $this->mailer->setRecipient(["test@example.com" => "Example User"]);
+        $this->assertSame(["test@example.com" => "Example User"], $this->mailer->to);
     }
 
 
     public function testAddRecipient1()
     {
-        $address = ["test@example.com" => "Example User"];
-        $mailer = new Mailer;
-        $mailer->addRecipient($address);
-        $this->checkProperty($mailer, "to", $address);
+        $this->mailer->addRecipient(["test@example.com" => "Example User"]);
+        $this->assertSame(["test@example.com" => "Example User"], $this->mailer->to);
     }
-
-
     public function testAddRecipient2()
     {
-        $address1 = ["test1@example.com" => "Example User1"];
-        $address2 = ["test2@example.com" => "Example User2"];
-        $mailer = new Mailer;
-        $mailer->addRecipient($address1);
-        $mailer->addRecipient($address2);
-        $this->checkProperty($mailer, "to", array_merge($address1, $address2));
+        $this->mailer->addRecipient(["test1@example.com" => "Example User1"]);
+        $this->mailer->addRecipient(["test2@example.com" => "Example User2"]);
+
+        $this->assertSame([
+            "test1@example.com" =>  "Example User1",
+            "test2@example.com" =>  "Example User2",
+        ], $this->mailer->to);
     }
 
 
     public function testSetCc1()
     {
-        $address = ["test@example.com" => "Example User"];
-        $mailer = new Mailer;
-        $mailer->setCc($address);
-        $this->checkProperty($mailer, "cc", $address);
+        $this->mailer->setCc(["test@example.com" => "Example User"]);
+        $this->assertSame(["test@example.com" => "Example User"], $this->mailer->cc);
     }
-
-
     public function testSetCc2()
     {
-        $address = ["test@example.com" => "Example User"];
-        $mailer = new Mailer;
-        $mailer->setCc("test2@example.com");
-        $mailer->setCc($address);
-        $this->checkProperty($mailer, "cc", $address);
+        $this->mailer->setCc("test2@example.com");
+        $this->mailer->setCc(["test@example.com" => "Example User"]);
+        $this->assertSame(["test@example.com" => "Example User"], $this->mailer->cc);
     }
 
 
     public function testAddCc1()
     {
-        $address = ["test@example.com" => "Example User"];
-        $mailer = new Mailer;
-        $mailer->addCc($address);
-        $this->checkProperty($mailer, "cc", $address);
+        $this->mailer->addCc(["test@example.com" => "Example User"]);
+        $this->assertSame(["test@example.com" => "Example User"], $this->mailer->cc);
     }
-
-
     public function testAddCc2()
     {
-        $address1 = ["test1@example.com" => "Example User1"];
-        $address2 = ["test2@example.com" => "Example User2"];
-        $mailer = new Mailer;
-        $mailer->addCc($address1);
-        $mailer->addCc($address2);
-        $this->checkProperty($mailer, "cc", array_merge($address1, $address2));
+        $this->mailer->addCc(["test1@example.com" => "Example User1"]);
+        $this->mailer->addCc(["test2@example.com" => "Example User2"]);
+
+        $this->assertSame([
+            "test1@example.com" =>  "Example User1",
+            "test2@example.com" =>  "Example User2",
+        ], $this->mailer->cc);
     }
 
 
     public function testSetBcc1()
     {
-        $address = ["test@example.com" => "Example User"];
-        $mailer = new Mailer;
-        $mailer->setBcc($address);
-        $this->checkProperty($mailer, "bcc", $address);
+        $this->mailer->setBcc(["test@example.com" => "Example User"]);
+        $this->assertSame(["test@example.com" => "Example User"], $this->mailer->bcc);
     }
-
-
     public function testSetBcc2()
     {
-        $address = ["test@example.com" => "Example User"];
-        $mailer = new Mailer;
-        $mailer->setBcc("test2@example.com");
-        $mailer->setBcc($address);
-        $this->checkProperty($mailer, "bcc", $address);
+        $this->mailer->setBcc("test2@example.com");
+        $this->mailer->setBcc(["test@example.com" => "Example User"]);
+        $this->assertSame(["test@example.com" => "Example User"], $this->mailer->bcc);
     }
 
 
     public function testAddBcc1()
     {
-        $address = ["test@example.com" => "Example User"];
-        $mailer = new Mailer;
-        $mailer->addBcc($address);
-        $this->checkProperty($mailer, "bcc", $address);
+        $this->mailer->addBcc(["test@example.com" => "Example User"]);
+        $this->assertSame(["test@example.com" => "Example User"], $this->mailer->bcc);
     }
-
-
     public function testAddBcc2()
     {
-        $address1 = ["test1@example.com" => "Example User1"];
-        $address2 = ["test2@example.com" => "Example User2"];
-        $mailer = new Mailer;
-        $mailer->addBcc($address1);
-        $mailer->addBcc($address2);
-        $this->checkProperty($mailer, "bcc", array_merge($address1, $address2));
+        $this->mailer->addBcc(["test1@example.com" => "Example User1"]);
+        $this->mailer->addBcc(["test2@example.com" => "Example User2"]);
+
+        $this->assertSame([
+            "test1@example.com" =>  "Example User1",
+            "test2@example.com" =>  "Example User2",
+        ], $this->mailer->bcc);
     }
 
 
     public function testSetContent1()
     {
-        $content = "Test Content";
-        $mailer = new Mailer;
-        $mailer->addContent($content);
-        $mailer->setContent($content);
-        $this->checkProperty($mailer, "content", $content);
+        $this->mailer->addContent("Test Content");
+        $this->mailer->setContent("Test Content");
+        $this->assertSame("Test Content", $this->mailer->content);
     }
 
 
     public function testAddContent1()
     {
-        $content = "Test Content";
-        $mailer = new Mailer;
-        $mailer->addContent($content);
-        $this->checkProperty($mailer, "content", $content);
+        $this->mailer->addContent("Test Content");
+        $this->assertSame("Test Content", $this->mailer->content);
     }
-
-
     public function testAddContent2()
     {
-        $content1 = "Test Content1\n";
-        $content2 = "Test Content2\n";
-        $mailer = new Mailer;
-        $mailer->addContent($content1);
-        $mailer->addContent($content2);
-        $this->checkProperty($mailer, "content", $content1 . $content2);
+        $this->mailer->addContent("Test Content1\n");
+        $this->mailer->addContent("Test Content2\n");
+        $this->assertSame("Test Content1\nTest Content2\n", $this->mailer->content);
     }
 
 
     public function testSetView()
     {
-        $mailer = new Mailer;
-        $mailer->addView("test1");
-        $mailer->setView("test1");
-        $this->checkProperty($mailer, "content", file_get_contents(__DIR__ . "/views/test1.blade.php"));
+        $this->mailer->addView("test1");
+        $this->mailer->setView("test1");
+        $this->assertSame(file_get_contents(__DIR__ . "/views/test1.blade.php"), $this->mailer->content);
     }
 
 
     public function testAddView1()
     {
-        $content = "Test Content";
-        $mailer = new Mailer;
-        $mailer->addView("test2", ["title" => "Test Title"]);
-        $this->checkProperty($mailer, "content", file_get_contents(__DIR__ . "/views/test2.html"));
+        $this->mailer->addView("test2", ["title" => "Test Title"]);
+        $this->assertSame(file_get_contents(__DIR__ . "/views/test2.html"), $this->mailer->content);
     }
-
-
     public function testAddView2()
     {
-        $mailer = new Mailer;
-        $mailer->addView("test1");
-        $mailer->addView("test1");
+        $this->mailer->addView("test1");
+        $this->mailer->addView("test1");
         $content = file_get_contents(__DIR__ . "/views/test1.blade.php");
-        $this->checkProperty($mailer, "content", $content . $content);
+        $this->assertSame($content . $content, $this->mailer->content);
     }
 
 
