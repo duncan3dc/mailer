@@ -133,7 +133,7 @@ class Email
      */
     public function setRecipient($address, $name = null)
     {
-        $this->to = $this->getaddress($address, $name);
+        $this->to = $this->getAddress($address, $name);
 
         return $this;
     }
@@ -149,7 +149,7 @@ class Email
      */
     public function addRecipient($address, $name = null)
     {
-        $this->to = array_merge($this->to, $this->getaddress($address, $name));
+        $this->to = array_merge($this->to, $this->getAddress($address, $name));
 
         return $this;
     }
@@ -165,7 +165,7 @@ class Email
      */
     public function setCc($address, $name = null)
     {
-        $this->cc = $this->getaddress($address, $name);
+        $this->cc = $this->getAddress($address, $name);
 
         return $this;
     }
@@ -181,7 +181,7 @@ class Email
      */
     public function addCc($address, $name = null)
     {
-        $this->cc = array_merge($this->cc, $this->getaddress($address, $name));
+        $this->cc = array_merge($this->cc, $this->getAddress($address, $name));
 
         return $this;
     }
@@ -197,7 +197,7 @@ class Email
      */
     public function setBcc($address, $name = null)
     {
-        $this->bcc = $this->getaddress($address, $name);
+        $this->bcc = $this->getAddress($address, $name);
 
         return $this;
     }
@@ -213,7 +213,7 @@ class Email
      */
     public function addBcc($address, $name = null)
     {
-        $this->bcc = array_merge($this->bcc, $this->getaddress($address, $name));
+        $this->bcc = array_merge($this->bcc, $this->getAddress($address, $name));
 
         return $this;
     }
@@ -229,7 +229,7 @@ class Email
      */
     public function setReplyTo($address, $name = null)
     {
-        $this->replyTo = $this->getaddress($address, $name);
+        $this->replyTo = $this->getAddress($address, $name);
 
         return $this;
     }
