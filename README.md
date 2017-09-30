@@ -7,6 +7,7 @@ PHPDoc API documentation is also available at [http://duncan3dc.github.io/mailer
 
 [![Latest Stable Version](https://poser.pugx.org/duncan3dc/mailer/version.svg)](https://packagist.org/packages/duncan3dc/mailer)
 [![Build Status](https://travis-ci.org/duncan3dc/mailer.svg?branch=master)](https://travis-ci.org/duncan3dc/mailer)
+[![Coverage Status](https://coveralls.io/repos/github/duncan3dc/mailer/badge.svg)](https://coveralls.io/github/duncan3dc/mailer)
 
 
 ## Quick Examples
