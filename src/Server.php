@@ -138,7 +138,7 @@ class Server implements ServerInterface
             return $this->mailer;
         }
 
-        $smtp = \Swift_SmtpTransport::newInstance($this->hostname, $this->port, $this->encryption);
+        $smtp = new \Swift_SmtpTransport($this->hostname, $this->port, $this->encryption);
 
         if ($this->username !== null) {
             $smtp->setUsername($this->username);
@@ -147,7 +147,7 @@ class Server implements ServerInterface
             $smtp->setPassword($this->password);
         }
 
-        $this->mailer = \Swift_Mailer::newInstance($smtp);
+        $this->mailer = new \Swift_Mailer($smtp);
 
         return $this->mailer;
     }

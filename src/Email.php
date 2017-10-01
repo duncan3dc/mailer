@@ -232,7 +232,7 @@ class Email implements EmailInterface
             throw new \Exception("Invalid recipient specified to send the email to");
         }
 
-        $message = \Swift_Message::newInstance();
+        $message = new \Swift_Message;
 
         $html = "<html>";
             $html .= "<head>";
