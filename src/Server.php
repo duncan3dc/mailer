@@ -7,37 +7,37 @@ class Server
     /**
      * @var string $hostname The hostname or ip address of the server to send the message from.
      */
-    protected $hostname = "localhost";
+    private $hostname = "localhost";
 
     /**
      * @var \Swift_Mailer $mailer An instance of the swift mailer class.
      */
-    protected $mailer;
+    private $mailer;
 
     /**
      * @var string $username The username to use for smtp authorisation.
      */
-    protected $username;
+    private $username;
 
     /**
      * @var string $password The password to use for smtp authorisation.
      */
-    protected $password;
+    private $password;
 
     /**
      * @var string $encryption The type of encryption to use.
      */
-    protected $encryption;
+    private $encryption;
 
     /**
      * @var int $port The port to connect the smtp server on.
      */
-    protected $port;
+    private $port;
 
     /**
      * @var string $returnPath The address to specify as the return path for bounces.
      */
-    protected $returnPath;
+    private $returnPath;
 
 
     /**
@@ -132,7 +132,7 @@ class Server
      *
      * @return \Swift_Mailer
      */
-    protected function getMailer()
+    private function getMailer()
     {
         if ($this->mailer) {
             return $this->mailer;

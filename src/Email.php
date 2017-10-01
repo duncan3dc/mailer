@@ -9,52 +9,52 @@ class Email
     /**
      * @var Server $server The server instance to use to send the email
      */
-    protected $server;
+    private $server;
 
     /**
      * @var string $subject The subject to put on the message
      */
-    protected $subject = "";
+    private $subject = "";
 
     /**
      * @var string $content The html content to include in the message
      */
-    protected $content = "";
+    private $content = "";
 
     /**
      * @var array $attachments Any attachments to include in the message
      */
-    protected $attachments = [];
+    private $attachments = [];
 
     /**
      * @var array $to The addresses to send the message to
      */
-    protected $to = [];
+    private $to = [];
 
     /**
      * @var array $cc The addresses to cc on the message
      */
-    protected $cc = [];
+    private $cc = [];
 
     /**
      * @var array $bcc The addresses to bcc on the message
      */
-    protected $bcc = [];
+    private $bcc = [];
 
     /**
      * @var array $replyTo The address to use as the reply to for the message
      */
-    protected $replyTo = [];
+    private $replyTo = [];
 
     /**
      * @var string $fromAddress The address to send the message from.
      */
-    protected $fromAddress = "no-reply@example.com";
+    private $fromAddress = "no-reply@example.com";
 
     /**
      * @var string $fromName The name to send the message from.
      */
-    protected $fromName = "";
+    private $fromName = "";
 
 
     /**
@@ -110,7 +110,7 @@ class Email
      *
      * @return array
      */
-    protected function getAddress($address, $name = null)
+    private function getAddress($address, $name = null)
     {
         if (!is_array($address)) {
             if ($name === null) {
