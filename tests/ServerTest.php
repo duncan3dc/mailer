@@ -15,8 +15,9 @@ class ServerTest extends \PHPUnit_Framework_TestCase
         $result = $server
             ->createMessage()
             ->setSubject("PHPUnit Test")
+            ->addRecipient("test@example.com")
             ->addContent("Please ignore this message")
-            ->send("test@example.com");
+            ->send();
 
         $this->assertSame(1, $result);
     }

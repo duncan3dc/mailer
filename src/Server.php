@@ -2,7 +2,7 @@
 
 namespace duncan3dc\Mailer;
 
-class Server
+class Server implements ServerInterface
 {
     /**
      * @var string $hostname The hostname or ip address of the server to send the message from.
@@ -46,7 +46,7 @@ class Server
      * @param string $hostname The hostname of the server
      * @param int $pot The port to connect to the server on
      */
-    public function __construct($hostname = null, $port = null)
+    public function __construct(string $hostname = null, string $port = null)
     {
         if ($hostname !== null) {
             $this->hostname = $hostname;
@@ -75,9 +75,9 @@ class Server
      * @param string $username The username to use
      * @param string $password The password to use
      *
-     * @return static
+     * @return ServerInterface
      */
-    public function setCredentials($username, $password)
+    public function setCredentials(string $username, string $password): ServerInterface
     {
         $this->username = $username;
         $this->password = $password;
@@ -91,9 +91,9 @@ class Server
      *
      * @param string $method The encryption method to use
      *
-     * @return static
+     * @return ServerInterface
      */
-    public function setEncryptionMethod($method)
+    public function setEncryptionMethod(string $method): ServerInterface
     {
         $this->encryption = $method;
 
@@ -106,9 +106,9 @@ class Server
      *
      * @param string $path The path to use
      *
-     * @return static
+     * @return ServerInterface
      */
-    public function setReturnPath($path)
+    public function setReturnPath(string $path): ServerInterface
     {
         $this->returnPath = $path;
 
@@ -119,9 +119,9 @@ class Server
     /**
      * Create a new instance of the Email class using this server.
      *
-     * @return Email
+     * @return EmailInterface
      */
-    public function createMessage()
+    public function createMessage(): EmailInterface
     {
         return new Email($this);
     }
@@ -132,7 +132,7 @@ class Server
      *
      * @return \Swift_Mailer
      */
-    private function getMailer()
+    private function getMailer(): \Swift_Mailer
     {
         if ($this->mailer) {
             return $this->mailer;
@@ -160,7 +160,7 @@ class Server
      *
      * @return int (number of successful recipients)
      */
-    public function send(\Swift_Message $message)
+    public function send(\Swift_Message $message): int
     {
         # Set the bounce return path if one has been specified
         if ($this->returnPath) {

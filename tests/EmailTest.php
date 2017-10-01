@@ -55,33 +55,15 @@ class EmailTest extends \PHPUnit_Framework_TestCase
     }
 
 
-    public function testSetRecipient1()
-    {
-        $this->email->setRecipient("test@example.com");
-        $this->assertSame(["test@example.com" => "test@example.com"], $this->email->to);
-    }
-    public function testSetRecipient2()
-    {
-        $this->email->setRecipient(["test@example.com" => "Example User"]);
-        $this->assertSame(["test@example.com" => "Example User"], $this->email->to);
-    }
-    public function testSetRecipient3()
-    {
-        $this->email->setRecipient("test2@example.com");
-        $this->email->setRecipient(["test@example.com" => "Example User"]);
-        $this->assertSame(["test@example.com" => "Example User"], $this->email->to);
-    }
-
-
     public function testAddRecipient1()
     {
-        $this->email->addRecipient(["test@example.com" => "Example User"]);
+        $this->email->addRecipient("test@example.com", "Example User");
         $this->assertSame(["test@example.com" => "Example User"], $this->email->to);
     }
     public function testAddRecipient2()
     {
-        $this->email->addRecipient(["test1@example.com" => "Example User1"]);
-        $this->email->addRecipient(["test2@example.com" => "Example User2"]);
+        $this->email->addRecipient("test1@example.com", "Example User1");
+        $this->email->addRecipient("test2@example.com", "Example User2");
 
         $this->assertSame([
             "test1@example.com" =>  "Example User1",
@@ -90,28 +72,15 @@ class EmailTest extends \PHPUnit_Framework_TestCase
     }
 
 
-    public function testSetCc1()
-    {
-        $this->email->setCc(["test@example.com" => "Example User"]);
-        $this->assertSame(["test@example.com" => "Example User"], $this->email->cc);
-    }
-    public function testSetCc2()
-    {
-        $this->email->setCc("test2@example.com");
-        $this->email->setCc(["test@example.com" => "Example User"]);
-        $this->assertSame(["test@example.com" => "Example User"], $this->email->cc);
-    }
-
-
     public function testAddCc1()
     {
-        $this->email->addCc(["test@example.com" => "Example User"]);
+        $this->email->addCc("test@example.com", "Example User");
         $this->assertSame(["test@example.com" => "Example User"], $this->email->cc);
     }
     public function testAddCc2()
     {
-        $this->email->addCc(["test1@example.com" => "Example User1"]);
-        $this->email->addCc(["test2@example.com" => "Example User2"]);
+        $this->email->addCc("test1@example.com", "Example User1");
+        $this->email->addCc("test2@example.com", "Example User2");
 
         $this->assertSame([
             "test1@example.com" =>  "Example User1",
@@ -120,41 +89,20 @@ class EmailTest extends \PHPUnit_Framework_TestCase
     }
 
 
-    public function testSetBcc1()
-    {
-        $this->email->setBcc(["test@example.com" => "Example User"]);
-        $this->assertSame(["test@example.com" => "Example User"], $this->email->bcc);
-    }
-    public function testSetBcc2()
-    {
-        $this->email->setBcc("test2@example.com");
-        $this->email->setBcc(["test@example.com" => "Example User"]);
-        $this->assertSame(["test@example.com" => "Example User"], $this->email->bcc);
-    }
-
-
     public function testAddBcc1()
     {
-        $this->email->addBcc(["test@example.com" => "Example User"]);
+        $this->email->addBcc("test@example.com", "Example User");
         $this->assertSame(["test@example.com" => "Example User"], $this->email->bcc);
     }
     public function testAddBcc2()
     {
-        $this->email->addBcc(["test1@example.com" => "Example User1"]);
-        $this->email->addBcc(["test2@example.com" => "Example User2"]);
+        $this->email->addBcc("test1@example.com", "Example User1");
+        $this->email->addBcc("test2@example.com", "Example User2");
 
         $this->assertSame([
             "test1@example.com" =>  "Example User1",
             "test2@example.com" =>  "Example User2",
         ], $this->email->bcc);
-    }
-
-
-    public function testSetContent1()
-    {
-        $this->email->addContent("Test Content");
-        $this->email->setContent("Test Content");
-        $this->assertSame("Test Content", $this->email->content);
     }
 
 
@@ -168,14 +116,6 @@ class EmailTest extends \PHPUnit_Framework_TestCase
         $this->email->addContent("Test Content1\n");
         $this->email->addContent("Test Content2\n");
         $this->assertSame("Test Content1\nTest Content2\n", $this->email->content);
-    }
-
-
-    public function testSetView()
-    {
-        $this->email->addView("test1");
-        $this->email->setView("test1");
-        $this->assertSame(file_get_contents(__DIR__ . "/views/test1.blade.php"), $this->email->content);
     }
 
 

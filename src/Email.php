@@ -4,7 +4,7 @@ namespace duncan3dc\Mailer;
 
 use duncan3dc\Laravel\Blade;
 
-class Email
+class Email implements EmailInterface
 {
     /**
      * @var Server $server The server instance to use to send the email
@@ -74,9 +74,9 @@ class Email
      * @param string $address The address to send the message from
      * @param string $name The name to send the message from
      *
-     * @return static
+     * @return EmailInterface
      */
-    public function setFromAddress($address, $name = null)
+    public function setFromAddress(string $address, string $name = null): EmailInterface
     {
         $this->fromAddress = $address;
         if ($name !== null) {
@@ -88,52 +88,15 @@ class Email
 
 
     /**
-     * Set the subject of the message, discarding any previously set subject.
+     * Set the subject of the message.
      *
      * @param string $subject The subject to use
      *
-     * @return static
+     * @return EmailInterface
      */
-    public function setSubject($subject)
+    public function setSubject(string $subject): EmailInterface
     {
         $this->subject = $subject;
-
-        return $this;
-    }
-
-
-    /**
-     * Convert the passed address and optional name into an array format that swiftmailer expects.
-     *
-     * @param string $address The email address
-     * @param string $name The name used for the email address
-     *
-     * @return array
-     */
-    private function getAddress($address, $name = null)
-    {
-        if (!is_array($address)) {
-            if ($name === null) {
-                $name = $address;
-            }
-            $address = [$address => $name];
-        }
-
-        return $address;
-    }
-
-
-    /**
-     * Set the recipient of the message, discarding any previously defined recipients.
-     *
-     * @param string $address The email address of the recipient
-     * @param string $name The name of the recipient
-     *
-     * @return static
-     */
-    public function setRecipient($address, $name = null)
-    {
-        $this->to = $this->getAddress($address, $name);
 
         return $this;
     }
@@ -145,27 +108,11 @@ class Email
      * @param string $address The email address of the recipient
      * @param string $name The name of the recipient
      *
-     * @return static
+     * @return EmailInterface
      */
-    public function addRecipient($address, $name = null)
+    public function addRecipient(string $address, string $name = null): EmailInterface
     {
-        $this->to = array_merge($this->to, $this->getAddress($address, $name));
-
-        return $this;
-    }
-
-
-    /**
-     * Set the cc for the message, discarding any previously defined cc addresses.
-     *
-     * @param string $address The email address of the recipient
-     * @param string $name The name of the recipient
-     *
-     * @return static
-     */
-    public function setCc($address, $name = null)
-    {
-        $this->cc = $this->getAddress($address, $name);
+        $this->to[$address] = $name ?? $address;
 
         return $this;
     }
@@ -177,27 +124,11 @@ class Email
      * @param string $address The email address of the recipient
      * @param string $name The name of the recipient
      *
-     * @return static
+     * @return EmailInterface
      */
-    public function addCc($address, $name = null)
+    public function addCc(string $address, string $name = null): EmailInterface
     {
-        $this->cc = array_merge($this->cc, $this->getAddress($address, $name));
-
-        return $this;
-    }
-
-
-    /**
-     * Set the bcc for the message, discarding any previously defined bcc addresses.
-     *
-     * @param string $address The email address of the recipient
-     * @param string $name The name of the recipient
-     *
-     * @return static
-     */
-    public function setBcc($address, $name = null)
-    {
-        $this->bcc = $this->getAddress($address, $name);
+        $this->cc[$address] = $name ?? $address;
 
         return $this;
     }
@@ -209,11 +140,11 @@ class Email
      * @param string $address The email address of the recipient
      * @param string $name The name of the recipient
      *
-     * @return static
+     * @return EmailInterface
      */
-    public function addBcc($address, $name = null)
+    public function addBcc(string $address, string $name = null): EmailInterface
     {
-        $this->bcc = array_merge($this->bcc, $this->getAddress($address, $name));
+        $this->bcc[$address] = $name ?? $address;
 
         return $this;
     }
@@ -225,26 +156,13 @@ class Email
      * @param string $address The email address of the recipient
      * @param string $name The name of the recipient
      *
-     * @return static
+     * @return EmailInterface
      */
-    public function setReplyTo($address, $name = null)
+    public function setReplyTo(string $address, string $name = null): EmailInterface
     {
-        $this->replyTo = $this->getAddress($address, $name);
-
-        return $this;
-    }
-
-
-    /**
-     * Set the content of the body of the message, discarding any previously added content.
-     *
-     * @param string $content The html content to add
-     *
-     * @return static
-     */
-    public function setContent($content)
-    {
-        $this->content = $content;
+        $this->replyTo = [
+            $address    =>  $name ?? $address,
+        ];
 
         return $this;
     }
@@ -255,9 +173,9 @@ class Email
      *
      * @param string $content The html content to add
      *
-     * @return static
+     * @return EmailInterface
      */
-    public function addContent($content)
+    public function addContent(string $content): EmailInterface
     {
         $this->content .= $content;
 
@@ -266,29 +184,14 @@ class Email
 
 
     /**
-     * Set the content of the body of the message, discarding any previously added content.
-     *
-     * @param string $view The name of the view to use
-     * @param array $params Parameters to pass to the view
-     *
-     * @return static
-     */
-    public function setView($view, array $params = null)
-    {
-        $this->content = "";
-        return $this->addView($view, $params);
-    }
-
-
-    /**
      * Add content to the body of the message.
      *
      * @param string $view The name of the view to use
      * @param array $params Parameters to pass to the view
      *
-     * @return static
+     * @return EmailInterface
      */
-    public function addView($view, array $params = null)
+    public function addView(string $view, array $params = null): EmailInterface
     {
         if (!is_array($params)) {
             $params = [];
@@ -304,9 +207,9 @@ class Email
      * @param string $path The full path to the file to attach
      * @param string $filename An optional filename to use (instead of the filename from the path)
      *
-     * @return static
+     * @return EmailInterface
      */
-    public function addAttachment($path, $filename = null)
+    public function addAttachment(string $path, string $filename = null): EmailInterface
     {
         $this->attachments[$path] = $filename;
 
@@ -317,17 +220,10 @@ class Email
     /**
      * Send the message.
      *
-     * @param string $address The email address of the recipient
-     * @param string $name The name of the recipient
-     *
      * @return int (number of successful recipients)
      */
-    public function send($address = null, $name = null)
+    public function send(): int
     {
-        if ($address !== null) {
-            $this->addRecipient($address, $name);
-        }
-
         if (count($this->to) < 1) {
             throw new \Exception("No recipients specified to send the email to");
         }
