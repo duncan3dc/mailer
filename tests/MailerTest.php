@@ -1,10 +1,10 @@
 <?php
 
-namespace duncan3dc\SwiftMailerTests;
+namespace duncan3dc\MailerTests;
 
 use duncan3dc\Laravel\Blade;
+use duncan3dc\Mailer\Mailer;
 use duncan3dc\ObjectIntruder\Intruder;
-use duncan3dc\SwiftMailer\Mailer;
 
 class MailerTest extends \PHPUnit_Framework_TestCase
 {

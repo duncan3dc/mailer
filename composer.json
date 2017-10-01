@@ -1,9 +1,9 @@
 {
-    "name": "duncan3dc/swiftmailer",
+    "name": "duncan3dc/mailer",
     "type": "library",
-    "description": "A simple wrapper around swiftmailer",
-    "keywords": ["swiftmailer", "email", "simple", "mailer"],
-    "homepage": "https://github.com/duncan3dc/swiftmailer",
+    "description": "A simple mailer abstraction with a clean interface",
+    "keywords": ["email", "mailer", "siwftmailer", "smtp"],
+    "homepage": "https://github.com/duncan3dc/mailer",
     "license": "Apache-2.0",
     "authors": [{
         "name": "Craig Duncan",
@@ -23,8 +23,8 @@
     },
     "autoload": {
         "psr-4": {
-            "duncan3dc\\SwiftMailer\\": "src/",
-            "duncan3dc\\SwiftMailerTests\\": "tests/"
+            "duncan3dc\\Mailer\\": "src/",
+            "duncan3dc\\MailerTests\\": "tests/"
         }
     }
 }

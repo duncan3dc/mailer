@@ -1,6 +1,6 @@
 <?php
 
-namespace duncan3dc\SwiftMailer;
+namespace duncan3dc\Mailer;
 
 use duncan3dc\Laravel\Blade;
 
