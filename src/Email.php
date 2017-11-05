@@ -225,11 +225,11 @@ class Email implements EmailInterface
     public function send(): int
     {
         if (count($this->to) < 1) {
-            throw new \Exception("No recipients specified to send the email to");
+            throw new Exception("No recipients specified to send the email to");
         }
         $keys = array_keys($this->to);
         if (!$keys[0]) {
-            throw new \Exception("Invalid recipient specified to send the email to");
+            throw new Exception("Invalid recipient specified to send the email to");
         }
 
         $message = new \Swift_Message;

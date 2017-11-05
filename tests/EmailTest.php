@@ -4,6 +4,7 @@ namespace duncan3dc\MailerTests;
 
 use duncan3dc\Laravel\Blade;
 use duncan3dc\Mailer\Email;
+use duncan3dc\Mailer\Exception;
 use duncan3dc\Mailer\Server;
 use duncan3dc\ObjectIntruder\Intruder;
 use Mockery;
@@ -69,6 +70,14 @@ class EmailTest extends \PHPUnit_Framework_TestCase
             "test1@example.com" =>  "Example User1",
             "test2@example.com" =>  "Example User2",
         ], $this->email->to);
+    }
+    public function testAddRecipient3()
+    {
+        $this->email->addRecipient("");
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage("Invalid recipient specified to send the email to");
+        $this->email->send();
     }
 
 
@@ -137,5 +146,14 @@ class EmailTest extends \PHPUnit_Framework_TestCase
     {
         $this->email->addAttachment("/tmp/asdkjh.txt", "data.txt");
         $this->assertSame(["/tmp/asdkjh.txt" => "data.txt"], $this->email->attachments);
+    }
+
+
+    public function testNoRecipients()
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage("No recipients specified to send the email to");
+
+        $this->email->send();
     }
 }
