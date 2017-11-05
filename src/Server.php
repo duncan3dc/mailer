@@ -77,12 +77,14 @@ class Server implements ServerInterface
      *
      * @return ServerInterface
      */
-    public function setCredentials(string $username, string $password): ServerInterface
+    public function withCredentials(string $username, string $password): ServerInterface
     {
-        $this->username = $username;
-        $this->password = $password;
+        $server = clone $this;
 
-        return $this;
+        $server->username = $username;
+        $server->password = $password;
+
+        return $server;
     }
 
 
@@ -93,11 +95,13 @@ class Server implements ServerInterface
      *
      * @return ServerInterface
      */
-    public function setEncryptionMethod(string $method): ServerInterface
+    public function withEncryptionMethod(string $method): ServerInterface
     {
-        $this->encryption = $method;
+        $server = clone $this;
 
-        return $this;
+        $server->encryption = $method;
+
+        return $server;
     }
 
 
@@ -108,11 +112,13 @@ class Server implements ServerInterface
      *
      * @return ServerInterface
      */
-    public function setReturnPath(string $path): ServerInterface
+    public function withReturnPath(string $path): ServerInterface
     {
-        $this->returnPath = $path;
+        $server = clone $this;
 
-        return $this;
+        $server->returnPath = $path;
+
+        return $server;
     }
 
 

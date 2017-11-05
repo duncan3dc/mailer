@@ -10,31 +10,19 @@ PHPDoc API documentation is also available at [http://duncan3dc.github.io/mailer
 [![Coverage Status](https://coveralls.io/repos/github/duncan3dc/mailer/badge.svg)](https://coveralls.io/github/duncan3dc/mailer)
 
 
-## Quick Examples
+## Quick Example
 
 Send an email using the local mail server:
 ```php
-$server = new \duncan3dc\Mailer\Server;
-
-$email = $server->createMessage();
-$email->setFromAddress("admin@example.com", "Administrator");
-$email->setRecipient("user@example.com", "Your Name");
-$email->setSubject("Test Email");
-$email->addContent("Hello");
-$email->addAttachment("/tmp/UGqucq", "sensible-filename.xls");
-$email->send();
-```
-
-Most methods can be chained for a fluent interface:
-```php
 (new \duncan3dc\Mailer\Server)
     ->createMessage()
-    ->setSubject("Test Email")
-    ->setRecipient("name@example.com")
-    ->addContent("Hello")
+    ->withFromAddress("admin@example.com", "Administrator")
+    ->withRecipient("user@example.com", "Your Name")
+    ->withSubject("Test Email")
+    ->withContent("Hello")
+    ->withAttachment("/tmp/UGqucq", "sensible-filename.xls")
     ->send();
 ```
-
 
 _Read more at http://duncan3dc.github.io/mailer/_  
 

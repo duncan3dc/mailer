@@ -76,14 +76,16 @@ class Email implements EmailInterface
      *
      * @return EmailInterface
      */
-    public function setFromAddress(string $address, string $name = null): EmailInterface
+    public function withFromAddress(string $address, string $name = null): EmailInterface
     {
-        $this->fromAddress = $address;
+        $email = clone $this;
+
+        $email->fromAddress = $address;
         if ($name !== null) {
-            $this->fromName = $name;
+            $email->fromName = $name;
         }
 
-        return $this;
+        return $email;
     }
 
 
@@ -94,11 +96,13 @@ class Email implements EmailInterface
      *
      * @return EmailInterface
      */
-    public function setSubject(string $subject): EmailInterface
+    public function withSubject(string $subject): EmailInterface
     {
-        $this->subject = $subject;
+        $email = clone $this;
 
-        return $this;
+        $email->subject = $subject;
+
+        return $email;
     }
 
 
@@ -110,11 +114,13 @@ class Email implements EmailInterface
      *
      * @return EmailInterface
      */
-    public function addRecipient(string $address, string $name = null): EmailInterface
+    public function withRecipient(string $address, string $name = null): EmailInterface
     {
-        $this->to[$address] = $name ?? $address;
+        $email = clone $this;
 
-        return $this;
+        $email->to[$address] = $name ?? $address;
+
+        return $email;
     }
 
 
@@ -126,11 +132,13 @@ class Email implements EmailInterface
      *
      * @return EmailInterface
      */
-    public function addCc(string $address, string $name = null): EmailInterface
+    public function withCc(string $address, string $name = null): EmailInterface
     {
-        $this->cc[$address] = $name ?? $address;
+        $email = clone $this;
 
-        return $this;
+        $email->cc[$address] = $name ?? $address;
+
+        return $email;
     }
 
 
@@ -142,11 +150,13 @@ class Email implements EmailInterface
      *
      * @return EmailInterface
      */
-    public function addBcc(string $address, string $name = null): EmailInterface
+    public function withBcc(string $address, string $name = null): EmailInterface
     {
-        $this->bcc[$address] = $name ?? $address;
+        $email = clone $this;
 
-        return $this;
+        $email->bcc[$address] = $name ?? $address;
+
+        return $email;
     }
 
 
@@ -158,13 +168,15 @@ class Email implements EmailInterface
      *
      * @return EmailInterface
      */
-    public function setReplyTo(string $address, string $name = null): EmailInterface
+    public function withReplyTo(string $address, string $name = null): EmailInterface
     {
-        $this->replyTo = [
+        $email = clone $this;
+
+        $email->replyTo = [
             $address    =>  $name ?? $address,
         ];
 
-        return $this;
+        return $email;
     }
 
 
@@ -175,11 +187,13 @@ class Email implements EmailInterface
      *
      * @return EmailInterface
      */
-    public function addContent(string $content): EmailInterface
+    public function withContent(string $content): EmailInterface
     {
-        $this->content .= $content;
+        $email = clone $this;
 
-        return $this;
+        $email->content .= $content;
+
+        return $email;
     }
 
 
@@ -191,13 +205,15 @@ class Email implements EmailInterface
      *
      * @return EmailInterface
      */
-    public function addView(string $view, array $params = null): EmailInterface
+    public function withView(string $view, array $params = null): EmailInterface
     {
         if (!is_array($params)) {
             $params = [];
         }
+
         $content = Blade::make($view, $params);
-        return $this->addContent($content);
+
+        return $this->withContent($content);
     }
 
 
@@ -209,11 +225,13 @@ class Email implements EmailInterface
      *
      * @return EmailInterface
      */
-    public function addAttachment(string $path, string $filename = null): EmailInterface
+    public function withAttachment(string $path, string $filename = null): EmailInterface
     {
-        $this->attachments[$path] = $filename;
+        $email = clone $this;
 
-        return $this;
+        $email->attachments[$path] = $filename;
+
+        return $email;
     }
 
 

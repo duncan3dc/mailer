@@ -12,7 +12,7 @@ interface ServerInterface
      *
      * @return ServerInterface
      */
-    public function setCredentials(string $username, string $password): ServerInterface;
+    public function withCredentials(string $username, string $password): ServerInterface;
 
 
     /**
@@ -22,7 +22,7 @@ interface ServerInterface
      *
      * @return ServerInterface
      */
-    public function setEncryptionMethod(string $method): ServerInterface;
+    public function withEncryptionMethod(string $method): ServerInterface;
 
 
     /**
@@ -32,7 +32,7 @@ interface ServerInterface
      *
      * @return ServerInterface
      */
-    public function setReturnPath(string $path): ServerInterface;
+    public function withReturnPath(string $path): ServerInterface;
 
 
     /**

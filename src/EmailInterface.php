@@ -13,7 +13,7 @@ interface EmailInterface
      *
      * @return EmailInterface
      */
-    public function setFromAddress(string $address, string $name = null): EmailInterface;
+    public function withFromAddress(string $address, string $name = null): EmailInterface;
 
 
     /**
@@ -23,7 +23,7 @@ interface EmailInterface
      *
      * @return EmailInterface
      */
-    public function setSubject(string $subject): EmailInterface;
+    public function withSubject(string $subject): EmailInterface;
 
 
     /**
@@ -34,7 +34,7 @@ interface EmailInterface
      *
      * @return EmailInterface
      */
-    public function addRecipient(string $address, string $name = null): EmailInterface;
+    public function withRecipient(string $address, string $name = null): EmailInterface;
 
 
     /**
@@ -45,7 +45,7 @@ interface EmailInterface
      *
      * @return EmailInterface
      */
-    public function addCc(string $address, string $name = null): EmailInterface;
+    public function withCc(string $address, string $name = null): EmailInterface;
 
 
     /**
@@ -56,7 +56,7 @@ interface EmailInterface
      *
      * @return EmailInterface
      */
-    public function addBcc(string $address, string $name = null): EmailInterface;
+    public function withBcc(string $address, string $name = null): EmailInterface;
 
 
     /**
@@ -67,7 +67,7 @@ interface EmailInterface
      *
      * @return EmailInterface
      */
-    public function setReplyTo(string $address, string $name = null): EmailInterface;
+    public function withReplyTo(string $address, string $name = null): EmailInterface;
 
 
     /**
@@ -77,7 +77,7 @@ interface EmailInterface
      *
      * @return EmailInterface
      */
-    public function addContent(string $content): EmailInterface;
+    public function withContent(string $content): EmailInterface;
 
 
     /**
@@ -88,7 +88,7 @@ interface EmailInterface
      *
      * @return EmailInterface
      */
-    public function addView(string $view, array $params = null): EmailInterface;
+    public function withView(string $view, array $params = null): EmailInterface;
 
 
     /**
@@ -99,7 +99,7 @@ interface EmailInterface
      *
      * @return EmailInterface
      */
-    public function addAttachment(string $path, string $filename = null): EmailInterface;
+    public function withAttachment(string $path, string $filename = null): EmailInterface;
 
 
     /**

@@ -24,128 +24,180 @@ class EmailTest extends \PHPUnit_Framework_TestCase
     }
 
 
-    public function testSetSubject()
+    public function testWithSubject()
     {
-        $this->email->setSubject("Test Subject");
-        $this->assertSame("Test Subject", $this->email->subject);
+        $email = $this->email->withSubject("Test Subject");
+        $email = new Intruder($email);
+
+        $this->assertSame("Test Subject", $email->subject);
+        $this->assertSame("", $this->email->subject);
     }
 
 
-    public function testSetFromAddress1()
+    public function testWithFromAddress1()
     {
-        $this->email->setFromAddress("test@example.com");
-        $this->assertSame("test@example.com", $this->email->fromAddress);
+        $email = $this->email->withFromAddress("test@example.com");
+        $email = new Intruder($email);
+
+        $this->assertSame("test@example.com", $email->fromAddress);
+        $this->assertSame("no-reply@example.com", $this->email->fromAddress);
     }
-    public function testSetFromAddress2()
+    public function testWithFromAddress2()
     {
-        $this->email->setFromAddress("test@example.com", "Bob");
-        $this->assertSame("Bob", $this->email->fromName);
-        $this->assertSame("test@example.com", $this->email->fromAddress);
+        $email = $this->email->withFromAddress("test@example.com", "Bob");
+        $email = new Intruder($email);
+
+        $this->assertSame("Bob", $email->fromName);
+        $this->assertSame("test@example.com", $email->fromAddress);
+
+        $this->assertSame("", $this->email->fromName);
+        $this->assertSame("no-reply@example.com", $this->email->fromAddress);
     }
 
 
-    public function testSetReplyTo1()
+    public function testWithReplyTo1()
     {
-        $this->email->setReplyTo("test@example.com");
-        $this->assertSame(["test@example.com" => "test@example.com"], $this->email->replyTo);
+        $email = $this->email->withReplyTo("test@example.com");
+        $email = new Intruder($email);
+
+        $this->assertSame(["test@example.com" => "test@example.com"], $email->replyTo);
+        $this->assertSame([], $this->email->replyTo);
     }
-    public function testSetReplyTo2()
+    public function testWithReplyTo2()
     {
-        $this->email->setReplyTo("test@example.com", "Bob");
-        $this->assertSame(["test@example.com" => "Bob"], $this->email->replyTo);
+        $email = $this->email->withReplyTo("test@example.com", "Bob");
+        $email = new Intruder($email);
+
+        $this->assertSame(["test@example.com" => "Bob"], $email->replyTo);
+        $this->assertSame([], $this->email->replyTo);
     }
 
 
-    public function testAddRecipient1()
+    public function testWithRecipient1()
     {
-        $this->email->addRecipient("test@example.com", "Example User");
-        $this->assertSame(["test@example.com" => "Example User"], $this->email->to);
+        $email = $this->email->withRecipient("test@example.com", "Example User");
+        $email = new Intruder($email);
+
+        $this->assertSame(["test@example.com" => "Example User"], $email->to);
+        $this->assertSame([], $this->email->to);
     }
-    public function testAddRecipient2()
+    public function testWithRecipient2()
     {
-        $this->email->addRecipient("test1@example.com", "Example User1");
-        $this->email->addRecipient("test2@example.com", "Example User2");
+        $email = $this->email
+            ->withRecipient("test1@example.com", "Example User1")
+            ->withRecipient("test2@example.com", "Example User2");
+        $email = new Intruder($email);
 
         $this->assertSame([
             "test1@example.com" =>  "Example User1",
             "test2@example.com" =>  "Example User2",
-        ], $this->email->to);
+        ], $email->to);
+        $this->assertSame([], $this->email->to);
     }
-    public function testAddRecipient3()
+    public function testWithRecipient3()
     {
-        $this->email->addRecipient("");
+        $email = $this->email->withRecipient("");
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage("Invalid recipient specified to send the email to");
-        $this->email->send();
+        $email->send();
     }
 
 
-    public function testAddCc1()
+    public function testWithCc1()
     {
-        $this->email->addCc("test@example.com", "Example User");
-        $this->assertSame(["test@example.com" => "Example User"], $this->email->cc);
+        $email = $this->email->withCc("test@example.com", "Example User");
+        $email = new Intruder($email);
+
+        $this->assertSame(["test@example.com" => "Example User"], $email->cc);
+        $this->assertSame([], $this->email->cc);
     }
-    public function testAddCc2()
+    public function testWithCc2()
     {
-        $this->email->addCc("test1@example.com", "Example User1");
-        $this->email->addCc("test2@example.com", "Example User2");
+        $email = $this->email
+            ->withCc("test1@example.com", "Example User1")
+            ->withCc("test2@example.com", "Example User2");
+        $email = new Intruder($email);
 
         $this->assertSame([
             "test1@example.com" =>  "Example User1",
             "test2@example.com" =>  "Example User2",
-        ], $this->email->cc);
+        ], $email->cc);
+        $this->assertSame([], $this->email->cc);
     }
 
 
-    public function testAddBcc1()
+    public function testWithBcc1()
     {
-        $this->email->addBcc("test@example.com", "Example User");
-        $this->assertSame(["test@example.com" => "Example User"], $this->email->bcc);
+        $email = $this->email->withBcc("test@example.com", "Example User");
+        $email = new Intruder($email);
+
+        $this->assertSame(["test@example.com" => "Example User"], $email->bcc);
+        $this->assertSame([], $this->email->bcc);
     }
-    public function testAddBcc2()
+    public function testWithBcc2()
     {
-        $this->email->addBcc("test1@example.com", "Example User1");
-        $this->email->addBcc("test2@example.com", "Example User2");
+        $email = $this->email
+            ->withBcc("test1@example.com", "Example User1")
+            ->withBcc("test2@example.com", "Example User2");
+        $email = new Intruder($email);
 
         $this->assertSame([
             "test1@example.com" =>  "Example User1",
             "test2@example.com" =>  "Example User2",
-        ], $this->email->bcc);
+        ], $email->bcc);
+        $this->assertSame([], $this->email->bcc);
     }
 
 
-    public function testAddContent1()
+    public function testWithContent1()
     {
-        $this->email->addContent("Test Content");
-        $this->assertSame("Test Content", $this->email->content);
+        $email = $this->email->withContent("Test Content");
+        $email = new Intruder($email);
+
+        $this->assertSame("Test Content", $email->content);
+        $this->assertSame("", $this->email->content);
     }
-    public function testAddContent2()
+    public function testWithContent2()
     {
-        $this->email->addContent("Test Content1\n");
-        $this->email->addContent("Test Content2\n");
-        $this->assertSame("Test Content1\nTest Content2\n", $this->email->content);
+        $email = $this->email
+            ->withContent("Test Content1\n")
+            ->withContent("Test Content2\n");
+        $email = new Intruder($email);
+
+        $this->assertSame("Test Content1\nTest Content2\n", $email->content);
+        $this->assertSame("", $this->email->content);
     }
 
 
-    public function testAddView1()
+    public function testWithView1()
     {
-        $this->email->addView("test2", ["title" => "Test Title"]);
-        $this->assertSame(file_get_contents(__DIR__ . "/views/test2.html"), $this->email->content);
+        $email = $this->email->withView("test2", ["title" => "Test Title"]);
+        $email = new Intruder($email);
+
+        $this->assertSame(file_get_contents(__DIR__ . "/views/test2.html"), $email->content);
+        $this->assertSame("", $this->email->content);
     }
-    public function testAddView2()
+    public function testWithView2()
     {
-        $this->email->addView("test1");
-        $this->email->addView("test1");
+        $email = $this->email
+            ->withView("test1")
+            ->withView("test1");
+        $email = new Intruder($email);
+
         $content = file_get_contents(__DIR__ . "/views/test1.blade.php");
-        $this->assertSame($content . $content, $this->email->content);
+        $this->assertSame($content . $content, $email->content);
+        $this->assertSame("", $this->email->content);
     }
 
 
-    public function testAddAttachment()
+    public function testWithAttachment()
     {
-        $this->email->addAttachment("/tmp/asdkjh.txt", "data.txt");
-        $this->assertSame(["/tmp/asdkjh.txt" => "data.txt"], $this->email->attachments);
+        $email = $this->email->withAttachment("/tmp/asdkjh.txt", "data.txt");
+        $email = new Intruder($email);
+
+        $this->assertSame(["/tmp/asdkjh.txt" => "data.txt"], $email->attachments);
+        $this->assertSame([], $this->email->attachments);
     }
 
 
