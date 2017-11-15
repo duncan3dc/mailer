@@ -38,6 +38,14 @@ interface EmailInterface
 
 
     /**
+     * Remove any recipients previously applied to the message.
+     *
+     * @return EmailInterface
+     */
+    public function withoutRecipients(): EmailInterface;
+
+
+    /**
      * Add a cc to the message.
      *
      * @param string $address The email address of the recipient
@@ -46,6 +54,14 @@ interface EmailInterface
      * @return EmailInterface
      */
     public function withCc(string $address, string $name = null): EmailInterface;
+
+
+    /**
+     * Remove any cc addresses previously applied to the message.
+     *
+     * @return EmailInterface
+     */
+    public function withoutCc(): EmailInterface;
 
 
     /**
@@ -60,6 +76,14 @@ interface EmailInterface
 
 
     /**
+     * Remove any bcc addresses previously applied to the message.
+     *
+     * @return EmailInterface
+     */
+    public function withoutBcc(): EmailInterface;
+
+
+    /**
      * Set the reply to address for the message.
      *
      * @param string $address The email address of the recipient
@@ -68,6 +92,14 @@ interface EmailInterface
      * @return EmailInterface
      */
     public function withReplyTo(string $address, string $name = null): EmailInterface;
+
+
+    /**
+     * Remove the reply to address previously applied to the message.
+     *
+     * @return EmailInterface
+     */
+    public function withoutReplyTo(): EmailInterface;
 
 
     /**
@@ -92,6 +124,14 @@ interface EmailInterface
 
 
     /**
+     * Remove any content previously applied to the message.
+     *
+     * @return EmailInterface
+     */
+    public function withoutContent(): EmailInterface;
+
+
+    /**
      * Add an attachment to the message.
      *
      * @param string $path The full path to the file to attach
@@ -100,6 +140,14 @@ interface EmailInterface
      * @return EmailInterface
      */
     public function withAttachment(string $path, string $filename = null): EmailInterface;
+
+
+    /**
+     * Remove any attachments previously applied to the message.
+     *
+     * @return EmailInterface
+     */
+    public function withoutAttachments(): EmailInterface;
 
 
     /**

@@ -73,6 +73,19 @@ class EmailTest extends \PHPUnit_Framework_TestCase
     }
 
 
+    public function testWithoutReplyTo()
+    {
+        $email1 = $this->email->withReplyTo("test@example.com");
+        $email1 = new Intruder($email1);
+
+        $email2 = $email1->withoutReplyTo();
+        $email2 = new Intruder($email2);
+
+        $this->assertSame(["test@example.com" => "test@example.com"], $email1->replyTo);
+        $this->assertSame([], $email2->replyTo);
+    }
+
+
     public function testWithRecipient1()
     {
         $email = $this->email->withRecipient("test@example.com", "Example User");
@@ -104,6 +117,19 @@ class EmailTest extends \PHPUnit_Framework_TestCase
     }
 
 
+    public function testWithoutRecipients()
+    {
+        $email1 = $this->email->withRecipient("test@example.com", "Example User");
+        $email1 = new Intruder($email1);
+
+        $email2 = $email1->withoutRecipients();
+        $email2 = new Intruder($email2);
+
+        $this->assertSame(["test@example.com" => "Example User"], $email1->to);
+        $this->assertSame([], $email2->to);
+    }
+
+
     public function testWithCc1()
     {
         $email = $this->email->withCc("test@example.com", "Example User");
@@ -127,6 +153,19 @@ class EmailTest extends \PHPUnit_Framework_TestCase
     }
 
 
+    public function testWithoutCc()
+    {
+        $email1 = $this->email->withCc("test@example.com", "Example User");
+        $email1 = new Intruder($email1);
+
+        $email2 = $email1->withoutCc();
+        $email2 = new Intruder($email2);
+
+        $this->assertSame(["test@example.com" => "Example User"], $email1->cc);
+        $this->assertSame([], $email2->cc);
+    }
+
+
     public function testWithBcc1()
     {
         $email = $this->email->withBcc("test@example.com", "Example User");
@@ -147,6 +186,19 @@ class EmailTest extends \PHPUnit_Framework_TestCase
             "test2@example.com" =>  "Example User2",
         ], $email->bcc);
         $this->assertSame([], $this->email->bcc);
+    }
+
+
+    public function testWithoutBcc()
+    {
+        $email1 = $this->email->withBcc("test@example.com", "Example User");
+        $email1 = new Intruder($email1);
+
+        $email2 = $email1->withoutBcc();
+        $email2 = new Intruder($email2);
+
+        $this->assertSame(["test@example.com" => "Example User"], $email1->bcc);
+        $this->assertSame([], $email2->bcc);
     }
 
 
@@ -191,6 +243,19 @@ class EmailTest extends \PHPUnit_Framework_TestCase
     }
 
 
+    public function testWithoutContent()
+    {
+        $email1 = $this->email->withContent("HELLO!");
+        $email1 = new Intruder($email1);
+
+        $email2 = $email1->withoutContent();
+        $email2 = new Intruder($email2);
+
+        $this->assertSame("HELLO!", $email1->content);
+        $this->assertSame("", $email2->content);
+    }
+
+
     public function testWithAttachment()
     {
         $email = $this->email->withAttachment("/tmp/asdkjh.txt", "data.txt");
@@ -198,6 +263,19 @@ class EmailTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame(["/tmp/asdkjh.txt" => "data.txt"], $email->attachments);
         $this->assertSame([], $this->email->attachments);
+    }
+
+
+    public function testWithoutAttachments()
+    {
+        $email1 = $this->email->withAttachment("/tmp/test.txt");
+        $email1 = new Intruder($email1);
+
+        $email2 = $email1->withoutAttachments();
+        $email2 = new Intruder($email2);
+
+        $this->assertSame(["/tmp/test.txt" => null], $email1->attachments);
+        $this->assertSame([], $email2->attachments);
     }
 
 

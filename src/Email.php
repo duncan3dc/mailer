@@ -69,6 +69,24 @@ class Email implements EmailInterface
 
 
     /**
+     * Clone the instance and update one of its properties.
+     *
+     * @param string $property The name of the property to update
+     * @param mixed $value The value to set the property to
+     *
+     * @return EmailInterface
+     */
+    private function clone(string $property, $value): EmailInterface
+    {
+        $email = clone $this;
+
+        $email->$property = $value;
+
+        return $email;
+    }
+
+
+    /**
      * Set the address to send emails from.
      *
      * @param string $address The address to send the message from
@@ -98,11 +116,7 @@ class Email implements EmailInterface
      */
     public function withSubject(string $subject): EmailInterface
     {
-        $email = clone $this;
-
-        $email->subject = $subject;
-
-        return $email;
+        return $this->clone("subject", $subject);
     }
 
 
@@ -125,6 +139,17 @@ class Email implements EmailInterface
 
 
     /**
+     * Remove any recipients previously applied to the message.
+     *
+     * @return EmailInterface
+     */
+    public function withoutRecipients(): EmailInterface
+    {
+        return $this->clone("to", []);
+    }
+
+
+    /**
      * Add a cc to the message.
      *
      * @param string $address The email address of the recipient
@@ -139,6 +164,17 @@ class Email implements EmailInterface
         $email->cc[$address] = $name ?? $address;
 
         return $email;
+    }
+
+
+    /**
+     * Remove any cc addresses previously applied to the message.
+     *
+     * @return EmailInterface
+     */
+    public function withoutCc(): EmailInterface
+    {
+        return $this->clone("cc", []);
     }
 
 
@@ -161,6 +197,17 @@ class Email implements EmailInterface
 
 
     /**
+     * Remove any bcc addresses previously applied to the message.
+     *
+     * @return EmailInterface
+     */
+    public function withoutBcc(): EmailInterface
+    {
+        return $this->clone("bcc", []);
+    }
+
+
+    /**
      * Set the reply to address for the message.
      *
      * @param string $address The email address of the recipient
@@ -170,13 +217,20 @@ class Email implements EmailInterface
      */
     public function withReplyTo(string $address, string $name = null): EmailInterface
     {
-        $email = clone $this;
-
-        $email->replyTo = [
+        return $this->clone("replyTo", [
             $address    =>  $name ?? $address,
-        ];
+        ]);
+    }
 
-        return $email;
+
+    /**
+     * Remove the reply to address previously applied to the message.
+     *
+     * @return EmailInterface
+     */
+    public function withoutReplyTo(): EmailInterface
+    {
+        return $this->clone("replyTo", []);
     }
 
 
@@ -189,11 +243,7 @@ class Email implements EmailInterface
      */
     public function withContent(string $content): EmailInterface
     {
-        $email = clone $this;
-
-        $email->content .= $content;
-
-        return $email;
+        return $this->clone("content", $this->content . $content);
     }
 
 
@@ -218,6 +268,17 @@ class Email implements EmailInterface
 
 
     /**
+     * Remove any content previously applied to the message.
+     *
+     * @return EmailInterface
+     */
+    public function withoutContent(): EmailInterface
+    {
+        return $this->clone("content", "");
+    }
+
+
+    /**
      * Add an attachment to the message.
      *
      * @param string $path The full path to the file to attach
@@ -232,6 +293,17 @@ class Email implements EmailInterface
         $email->attachments[$path] = $filename;
 
         return $email;
+    }
+
+
+    /**
+     * Remove any attachments previously applied to the message.
+     *
+     * @return EmailInterface
+     */
+    public function withoutAttachments(): EmailInterface
+    {
+        return $this->clone("attachments", []);
     }
 
 

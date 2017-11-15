@@ -28,13 +28,24 @@ class ServerTest extends \PHPUnit_Framework_TestCase
     }
 
 
-    public function testWithEncryptionMethods()
+    public function testWithEncryptionMethods1()
     {
         $server = $this->server->withEncryptionMethod("tls");
         $server = new Intruder($server);
 
         $this->assertSame("tls", $server->encryption);
-        $this->assertSame("ssl", $this->server->encryption);
+        $this->assertSame(null, $this->server->encryption);
+    }
+    public function testWithEncryptionMethods2()
+    {
+        $server1 = new Server("email.com");
+        $server1 = new Intruder($server1);
+
+        $server2 = $server1->withEncryptionMethod("tls");
+        $server2 = new Intruder($server2);
+
+        $this->assertSame("tls", $server2->encryption);
+        $this->assertSame("ssl", $server1->encryption);
     }
 
 
