@@ -55,7 +55,7 @@ class Server implements ServerInterface
             $this->port = $port;
         }
 
-        if ($hostname === "localhost") {
+        if ($this->hostname === "localhost") {
             $this->encryption = null;
             if ($port === null) {
                 $this->port = 25;
