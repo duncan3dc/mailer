@@ -4,12 +4,13 @@ namespace duncan3dc\MailerTests;
 
 use duncan3dc\Mailer\Server;
 use duncan3dc\ObjectIntruder\Intruder;
+use PHPUnit\Framework\TestCase;
 
-class ServerTest extends \PHPUnit_Framework_TestCase
+class ServerTest extends TestCase
 {
     private $server;
 
-    public function __construct()
+    public function setUp()
     {
         $server = new Server;
         $this->server = new Intruder($server);

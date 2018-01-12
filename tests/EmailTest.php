@@ -8,19 +8,26 @@ use duncan3dc\Mailer\Exception;
 use duncan3dc\Mailer\Server;
 use duncan3dc\ObjectIntruder\Intruder;
 use Mockery;
+use PHPUnit\Framework\TestCase;
 
-class EmailTest extends \PHPUnit_Framework_TestCase
+class EmailTest extends TestCase
 {
     private $email;
     private $server;
 
-    public function __construct()
+    public function setUp()
     {
         $this->server = Mockery::mock(Server::class);
         $email = new Email($this->server);
         $this->email = new Intruder($email);
 
         Blade::addPath(__DIR__ . "/views");
+    }
+
+
+    public function tearDown()
+    {
+        Mockery::close();
     }
 
 
