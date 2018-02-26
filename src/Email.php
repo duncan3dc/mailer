@@ -261,7 +261,7 @@ class Email implements EmailInterface
             $params = [];
         }
 
-        $content = Blade::make($view, $params);
+        $content = Blade::render($view, $params);
 
         return $this->withContent($content);
     }

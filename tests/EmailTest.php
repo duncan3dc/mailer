@@ -248,6 +248,12 @@ class EmailTest extends TestCase
         $this->assertSame($content . $content, $email->content);
         $this->assertSame("", $this->email->content);
     }
+    public function testWithView3()
+    {
+        $this->expectException(\ErrorException::class);
+        $this->expectExceptionMessage("syntax error, unexpected 'throw' (T_THROW)");
+        $this->email->withView("test3");
+    }
 
 
     public function testWithoutContent()
