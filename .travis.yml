@@ -23,11 +23,15 @@ before_script:
   - mailcatcher
 
 script:
-  - vendor/bin/phpunit --coverage-clover=clover.xml
+  - vendor/bin/phpunit
   - tests/lint.sh
 
-after_success:
-  - vendor/bin/coveralls
+jobs:
+  include:
+    - stage: coverage
+      script:
+        - vendor/bin/phpunit --coverage-clover=coverage.xml
+        - bash <(curl -s https://codecov.io/bash)
 
 git:
   depth: 5
