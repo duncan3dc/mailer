@@ -251,7 +251,6 @@ class EmailTest extends TestCase
     public function testWithView3(): void
     {
         $this->expectException(\ErrorException::class);
-        $this->expectExceptionMessage("syntax error, unexpected 'throw' (T_THROW)");
         $this->email->withView("test3");
     }
 

@@ -14,12 +14,13 @@
     "require": {
         "duncan3dc/blade": "^4.0",
         "swiftmailer/swiftmailer": "^6.0",
-        "php": "^7.3"
+        "egulias/email-validator": "^3.2",
+        "php": "^7.3 || ^8.0"
     },
     "require-dev": {
-        "duncan3dc/object-intruder": "^0.3.0",
-        "mockery/mockery": "^1.0",
-        "phpunit/phpunit": "^8.5"
+        "duncan3dc/object-intruder": "^0.3 || ^1.0",
+        "mockery/mockery": "^1.4.4",
+        "phpunit/phpunit": "^8.5.29"
     },
     "autoload": {
         "psr-4": {"duncan3dc\\Mailer\\": "src/"}

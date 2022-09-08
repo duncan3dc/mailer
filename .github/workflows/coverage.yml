@@ -10,7 +10,7 @@ jobs:
       - name: Create Docker Container
         run: |
           docker run --interactive --detach --name mailer-catcher schickling/mailcatcher
-          docker build . -t ci-image --build-arg PHP_VERSION=7.3 --build-arg COVERAGE=pcov
+          docker build . -t ci-image --build-arg PHP_VERSION=8.1 --build-arg COVERAGE=pcov
           docker run --interactive --detach \
             --volume ${{ github.workspace }}:/app \
             --link mailer-catcher \
