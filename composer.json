@@ -14,7 +14,7 @@
     "require": {
         "duncan3dc/blade": "^4.0",
         "swiftmailer/swiftmailer": "^6.0",
-        "php": "^7.1"
+        "php": "^7.3"
     },
     "require-dev": {
         "duncan3dc/object-intruder": "^0.3.0",
