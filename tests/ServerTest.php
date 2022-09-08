@@ -10,14 +10,14 @@ class ServerTest extends TestCase
 {
     private $server;
 
-    public function setUp()
+    public function setUp(): void
     {
         $server = new Server;
         $this->server = new Intruder($server);
     }
 
 
-    public function testWithCredentials()
+    public function testWithCredentials(): void
     {
         $server = $this->server->withCredentials("bob", "secret");
         $server = new Intruder($server);
@@ -29,7 +29,7 @@ class ServerTest extends TestCase
     }
 
 
-    public function testWithEncryptionMethods1()
+    public function testWithEncryptionMethods1(): void
     {
         $server = $this->server->withEncryptionMethod("tls");
         $server = new Intruder($server);
@@ -37,7 +37,7 @@ class ServerTest extends TestCase
         $this->assertSame("tls", $server->encryption);
         $this->assertSame(null, $this->server->encryption);
     }
-    public function testWithEncryptionMethods2()
+    public function testWithEncryptionMethods2(): void
     {
         $server1 = new Server("email.com");
         $server1 = new Intruder($server1);
@@ -50,7 +50,7 @@ class ServerTest extends TestCase
     }
 
 
-    public function testWithReturnPath()
+    public function testWithReturnPath(): void
     {
         $server = $this->server->withReturnPath("bounces@example.com");
         $server = new Intruder($server);
@@ -60,7 +60,7 @@ class ServerTest extends TestCase
     }
 
 
-    public function testSend()
+    public function testSend(): void
     {
         $server = new Server("mailer-catcher", 1025);
         $server = $server->withEncryptionMethod("");

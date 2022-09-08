@@ -15,7 +15,7 @@ class EmailTest extends TestCase
     private $email;
     private $server;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->server = Mockery::mock(Server::class);
         $email = new Email($this->server);
@@ -25,13 +25,13 @@ class EmailTest extends TestCase
     }
 
 
-    public function tearDown()
+    public function tearDown(): void
     {
         Mockery::close();
     }
 
 
-    public function testWithSubject()
+    public function testWithSubject(): void
     {
         $email = $this->email->withSubject("Test Subject");
         $email = new Intruder($email);
@@ -41,7 +41,7 @@ class EmailTest extends TestCase
     }
 
 
-    public function testWithFromAddress1()
+    public function testWithFromAddress1(): void
     {
         $email = $this->email->withFromAddress("test@example.com");
         $email = new Intruder($email);
@@ -49,7 +49,7 @@ class EmailTest extends TestCase
         $this->assertSame("test@example.com", $email->fromAddress);
         $this->assertSame("no-reply@example.com", $this->email->fromAddress);
     }
-    public function testWithFromAddress2()
+    public function testWithFromAddress2(): void
     {
         $email = $this->email->withFromAddress("test@example.com", "Bob");
         $email = new Intruder($email);
@@ -62,7 +62,7 @@ class EmailTest extends TestCase
     }
 
 
-    public function testWithReplyTo1()
+    public function testWithReplyTo1(): void
     {
         $email = $this->email->withReplyTo("test@example.com");
         $email = new Intruder($email);
@@ -70,7 +70,7 @@ class EmailTest extends TestCase
         $this->assertSame(["test@example.com" => "test@example.com"], $email->replyTo);
         $this->assertSame([], $this->email->replyTo);
     }
-    public function testWithReplyTo2()
+    public function testWithReplyTo2(): void
     {
         $email = $this->email->withReplyTo("test@example.com", "Bob");
         $email = new Intruder($email);
@@ -80,7 +80,7 @@ class EmailTest extends TestCase
     }
 
 
-    public function testWithoutReplyTo()
+    public function testWithoutReplyTo(): void
     {
         $email1 = $this->email->withReplyTo("test@example.com");
         $email1 = new Intruder($email1);
@@ -93,7 +93,7 @@ class EmailTest extends TestCase
     }
 
 
-    public function testWithRecipient1()
+    public function testWithRecipient1(): void
     {
         $email = $this->email->withRecipient("test@example.com", "Example User");
         $email = new Intruder($email);
@@ -101,7 +101,7 @@ class EmailTest extends TestCase
         $this->assertSame(["test@example.com" => "Example User"], $email->to);
         $this->assertSame([], $this->email->to);
     }
-    public function testWithRecipient2()
+    public function testWithRecipient2(): void
     {
         $email = $this->email
             ->withRecipient("test1@example.com", "Example User1")
@@ -114,7 +114,7 @@ class EmailTest extends TestCase
         ], $email->to);
         $this->assertSame([], $this->email->to);
     }
-    public function testWithRecipient3()
+    public function testWithRecipient3(): void
     {
         $email = $this->email->withRecipient("");
 
@@ -124,7 +124,7 @@ class EmailTest extends TestCase
     }
 
 
-    public function testWithoutRecipients()
+    public function testWithoutRecipients(): void
     {
         $email1 = $this->email->withRecipient("test@example.com", "Example User");
         $email1 = new Intruder($email1);
@@ -137,7 +137,7 @@ class EmailTest extends TestCase
     }
 
 
-    public function testWithCc1()
+    public function testWithCc1(): void
     {
         $email = $this->email->withCc("test@example.com", "Example User");
         $email = new Intruder($email);
@@ -145,7 +145,7 @@ class EmailTest extends TestCase
         $this->assertSame(["test@example.com" => "Example User"], $email->cc);
         $this->assertSame([], $this->email->cc);
     }
-    public function testWithCc2()
+    public function testWithCc2(): void
     {
         $email = $this->email
             ->withCc("test1@example.com", "Example User1")
@@ -160,7 +160,7 @@ class EmailTest extends TestCase
     }
 
 
-    public function testWithoutCc()
+    public function testWithoutCc(): void
     {
         $email1 = $this->email->withCc("test@example.com", "Example User");
         $email1 = new Intruder($email1);
@@ -173,7 +173,7 @@ class EmailTest extends TestCase
     }
 
 
-    public function testWithBcc1()
+    public function testWithBcc1(): void
     {
         $email = $this->email->withBcc("test@example.com", "Example User");
         $email = new Intruder($email);
@@ -181,7 +181,7 @@ class EmailTest extends TestCase
         $this->assertSame(["test@example.com" => "Example User"], $email->bcc);
         $this->assertSame([], $this->email->bcc);
     }
-    public function testWithBcc2()
+    public function testWithBcc2(): void
     {
         $email = $this->email
             ->withBcc("test1@example.com", "Example User1")
@@ -196,7 +196,7 @@ class EmailTest extends TestCase
     }
 
 
-    public function testWithoutBcc()
+    public function testWithoutBcc(): void
     {
         $email1 = $this->email->withBcc("test@example.com", "Example User");
         $email1 = new Intruder($email1);
@@ -209,7 +209,7 @@ class EmailTest extends TestCase
     }
 
 
-    public function testWithContent1()
+    public function testWithContent1(): void
     {
         $email = $this->email->withContent("Test Content");
         $email = new Intruder($email);
@@ -217,7 +217,7 @@ class EmailTest extends TestCase
         $this->assertSame("Test Content", $email->content);
         $this->assertSame("", $this->email->content);
     }
-    public function testWithContent2()
+    public function testWithContent2(): void
     {
         $email = $this->email
             ->withContent("Test Content1\n")
@@ -229,7 +229,7 @@ class EmailTest extends TestCase
     }
 
 
-    public function testWithView1()
+    public function testWithView1(): void
     {
         $email = $this->email->withView("test2", ["title" => "Test Title"]);
         $email = new Intruder($email);
@@ -237,7 +237,7 @@ class EmailTest extends TestCase
         $this->assertSame(file_get_contents(__DIR__ . "/views/test2.html"), $email->content);
         $this->assertSame("", $this->email->content);
     }
-    public function testWithView2()
+    public function testWithView2(): void
     {
         $email = $this->email
             ->withView("test1")
@@ -248,7 +248,7 @@ class EmailTest extends TestCase
         $this->assertSame($content . $content, $email->content);
         $this->assertSame("", $this->email->content);
     }
-    public function testWithView3()
+    public function testWithView3(): void
     {
         $this->expectException(\ErrorException::class);
         $this->expectExceptionMessage("syntax error, unexpected 'throw' (T_THROW)");
@@ -256,7 +256,7 @@ class EmailTest extends TestCase
     }
 
 
-    public function testWithoutContent()
+    public function testWithoutContent(): void
     {
         $email1 = $this->email->withContent("HELLO!");
         $email1 = new Intruder($email1);
@@ -269,7 +269,7 @@ class EmailTest extends TestCase
     }
 
 
-    public function testWithAttachment()
+    public function testWithAttachment(): void
     {
         $email = $this->email->withAttachment("/tmp/asdkjh.txt", "data.txt");
         $email = new Intruder($email);
@@ -279,7 +279,7 @@ class EmailTest extends TestCase
     }
 
 
-    public function testWithoutAttachments()
+    public function testWithoutAttachments(): void
     {
         $email1 = $this->email->withAttachment("/tmp/test.txt");
         $email1 = new Intruder($email1);
@@ -292,7 +292,7 @@ class EmailTest extends TestCase
     }
 
 
-    public function testNoRecipients()
+    public function testNoRecipients(): void
     {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage("No recipients specified to send the email to");
