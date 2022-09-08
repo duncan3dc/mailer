@@ -62,8 +62,8 @@ class ServerTest extends TestCase
 
     public function testSend()
     {
-        $port = getenv("TRAVIS") ? 1025 : 25;
-        $server = new Server("localhost", $port);
+        $server = new Server("mailer-catcher", 1025);
+        $server = $server->withEncryptionMethod("");
 
         $tmp = tempnam(sys_get_temp_dir(), "phpunit_");
 

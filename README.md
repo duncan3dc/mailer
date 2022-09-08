@@ -6,7 +6,7 @@ Full documentation is available at http://duncan3dc.github.io/mailer/
 PHPDoc API documentation is also available at [http://duncan3dc.github.io/mailer/api/](http://duncan3dc.github.io/mailer/api/namespaces/duncan3dc.Mailer.html)  
 
 [![release](https://poser.pugx.org/duncan3dc/mailer/version.svg)](https://packagist.org/packages/duncan3dc/mailer)
-[![build](https://travis-ci.org/duncan3dc/mailer.svg?branch=master)](https://travis-ci.org/duncan3dc/mailer)
+[![build](https://github.com/duncan3dc/mailer/workflows/.github/workflows/buildcheck.yml/badge.svg?branch=main)](https://github.com/duncan3dc/mailer/actions/workflows/buildcheck.yml)
 [![coverage](https://codecov.io/gh/duncan3dc/mailer/graph/badge.svg)](https://codecov.io/gh/duncan3dc/mailer)
 
 

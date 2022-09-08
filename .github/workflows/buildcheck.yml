@@ -1,0 +1,42 @@
+name: buildcheck
+
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: 0 10 13 * *
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php:
+          - "7.1"
+          - "7.2"
+          - "7.3"
+        composer:
+          - ""
+          - "--prefer-lowest"
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Create Docker Containers
+        run: |
+          docker run --interactive --detach --name mailer-catcher schickling/mailcatcher
+          docker build . -t ci-image --build-arg PHP_VERSION=${{ matrix.php }}
+          docker run --interactive --detach --volume ${{ github.workspace }}:/app --link mailer-catcher --name ci ci-image
+
+      - name: Install Dependencies
+        run: docker exec ci composer update --no-interaction --no-ansi --prefer-dist ${{ matrix.composer }}
+
+      - name: PHPUnit
+        run: docker exec ci vendor/bin/phpunit
+
+      - name: Static Analysis
+        run: tests/lint.sh
+
+      - name: Composer Validate
+        run: docker exec ci composer validate --strict

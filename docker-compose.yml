@@ -1,0 +1,15 @@
+version: "3.4"
+
+services:
+
+  mailer-cli:
+    container_name: mailer-cli
+    build: ./
+    volumes:
+      - ./:/app
+    stdin_open: true
+    tty: true
+
+  mailer-catcher:
+    container_name: mailer-catcher
+    image: schickling/mailcatcher
