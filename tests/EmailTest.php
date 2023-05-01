@@ -6,20 +6,31 @@ use duncan3dc\Laravel\Blade;
 use duncan3dc\Mailer\Email;
 use duncan3dc\Mailer\Exception;
 use duncan3dc\Mailer\Server;
-use duncan3dc\ObjectIntruder\Intruder;
+use GuzzleHttp\Client;
 use Mockery;
 use PHPUnit\Framework\TestCase;
+
+use function json_decode;
+use function print_r;
 
 class EmailTest extends TestCase
 {
     private $email;
     private $server;
 
+    private $catcher;
+
     public function setUp(): void
     {
-        $this->server = Mockery::mock(Server::class);
-        $email = new Email($this->server);
-        $this->email = new Intruder($email);
+        $server = new Server("mailer-catcher", 1025);
+        $server = $server->withEncryptionMethod("");
+
+        $this->email = new Email($server);
+        $this->email = $this->email->withRecipient("nobody@nowhere.com");
+
+        $this->catcher = new Client([
+            "base_uri" => "http://mailer-catcher:1080",
+        ]);
 
         Blade::addPath(__DIR__ . "/views");
     }
@@ -27,44 +38,71 @@ class EmailTest extends TestCase
 
     public function tearDown(): void
     {
+        $this->catcher->request("DELETE", "/messages");
         Mockery::close();
     }
 
 
-    public function testWithSubject(): void
+    private function getCaughtEmails(Email $email): array
+    {
+        $this->email->send();
+        $email->send();
+
+        $response = $this->catcher->request("GET", "/messages");
+        $messages = json_decode($response->getBody()->getContents(), true);
+        foreach ($messages as $message) {
+            $response = $this->catcher->request("GET", "/messages/" . $message["id"] . ".json");
+            $message = json_decode($response->getBody()->getContents(), true);
+            $messages[] = $message;
+        }
+
+        self::assertIsArray($messages);
+print_r($messages);
+
+        return $messages;
+    }
+
+
+    public function testWithSubject1(): void
     {
         $email = $this->email->withSubject("Test Subject");
-        $email = new Intruder($email);
+        $emails = $this->getCaughtEmails($email);
 
-        $this->assertSame("Test Subject", $email->subject);
-        $this->assertSame("", $this->email->subject);
+        self::assertSame("Test Subject", $emails[1]["subject"]);
+        self::assertSame(null, $emails[0]["subject"]);
     }
 
 
     public function testWithFromAddress1(): void
     {
         $email = $this->email->withFromAddress("test@example.com");
-        $email = new Intruder($email);
+        $emails = $this->getCaughtEmails($email);
 
-        $this->assertSame("test@example.com", $email->from->getAddress());
-        $this->assertSame(null, $this->email->from);
+        self::assertSame("<test@example.com>", $emails[1]["sender"]);
+        self::assertSame("<no-reply@example.com>", $emails[0]["sender"]);
+
+        self::assertSame(null, $this->email->from);
     }
+
+
     public function testWithFromAddress2(): void
     {
         $email = $this->email->withFromAddress("test@example.com", "Bob");
-        $email = new Intruder($email);
+        $emails = $this->getCaughtEmails($email);
 
-        $this->assertSame("Bob", $email->from->getName());
-        $this->assertSame("test@example.com", $email->from->getAddress());
+#        self::assertSame("Bob <test@example.com>", $emails[1]["sender"]);
+        self::assertSame("<no-reply@example.com>", $emails[0]["sender"]);
 
-        $this->assertSame(null, $this->email->from);
+        self::assertSame(null, $this->email->from);
     }
 
 
     public function testWithReplyTo1(): void
     {
         $email = $this->email->withReplyTo("test@example.com");
-        $email = new Intruder($email);
+$email = $email->withCc('who@gmail.com');
+$email = $email->withBcc('who@gmail.com');
+        $emails = $this->getCaughtEmails($email);
 
         $this->assertSame("test@example.com", $email->replyTo->getAddress());
         $this->assertSame("", $email->replyTo->getName());

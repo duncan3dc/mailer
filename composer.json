@@ -18,7 +18,9 @@
     },
     "require-dev": {
         "duncan3dc/object-intruder": "^0.3 || ^1.0",
+        "guzzlehttp/guzzle": "^7.0",
         "mockery/mockery": "^1.4.4",
+        "ext-json": "*",
         "phpunit/phpunit": "^8.5.29"
     },
     "autoload": {
