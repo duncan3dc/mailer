@@ -45,10 +45,6 @@ interface ServerInterface
 
     /**
      * Send an email using this server.
-     *
-     * @param \Swift_Message $message The email message to send.
-     *
-     * @return int (number of successful recipients)
      */
-    public function send(\Swift_Message $message): int;
+    public function send(\Symfony\Component\Mime\Email $message): bool;
 }
