@@ -46,19 +46,18 @@ class EmailTest extends TestCase
         $email = $this->email->withFromAddress("test@example.com");
         $email = new Intruder($email);
 
-        $this->assertSame("test@example.com", $email->fromAddress);
-        $this->assertSame("no-reply@example.com", $this->email->fromAddress);
+        $this->assertSame("test@example.com", $email->from->getAddress());
+        $this->assertSame(null, $this->email->from);
     }
     public function testWithFromAddress2(): void
     {
         $email = $this->email->withFromAddress("test@example.com", "Bob");
         $email = new Intruder($email);
 
-        $this->assertSame("Bob", $email->fromName);
-        $this->assertSame("test@example.com", $email->fromAddress);
+        $this->assertSame("Bob", $email->from->getName());
+        $this->assertSame("test@example.com", $email->from->getAddress());
 
-        $this->assertSame("", $this->email->fromName);
-        $this->assertSame("no-reply@example.com", $this->email->fromAddress);
+        $this->assertSame(null, $this->email->from);
     }
 
 
@@ -67,16 +66,20 @@ class EmailTest extends TestCase
         $email = $this->email->withReplyTo("test@example.com");
         $email = new Intruder($email);
 
-        $this->assertSame(["test@example.com" => "test@example.com"], $email->replyTo);
-        $this->assertSame([], $this->email->replyTo);
+        $this->assertSame("test@example.com", $email->replyTo->getAddress());
+        $this->assertSame("", $email->replyTo->getName());
+
+        $this->assertSame(null, $this->email->replyTo);
     }
     public function testWithReplyTo2(): void
     {
         $email = $this->email->withReplyTo("test@example.com", "Bob");
         $email = new Intruder($email);
 
-        $this->assertSame(["test@example.com" => "Bob"], $email->replyTo);
-        $this->assertSame([], $this->email->replyTo);
+        $this->assertSame("test@example.com", $email->replyTo->getAddress());
+        $this->assertSame("Bob", $email->replyTo->getName());
+
+        $this->assertSame(null, $this->email->replyTo);
     }
 
 
@@ -88,8 +91,9 @@ class EmailTest extends TestCase
         $email2 = $email1->withoutReplyTo();
         $email2 = new Intruder($email2);
 
-        $this->assertSame(["test@example.com" => "test@example.com"], $email1->replyTo);
-        $this->assertSame([], $email2->replyTo);
+        $this->assertSame("test@example.com", $email1->replyTo->getAddress());
+
+        $this->assertSame(null, $email2->replyTo);
     }
 
 
@@ -98,7 +102,10 @@ class EmailTest extends TestCase
         $email = $this->email->withRecipient("test@example.com", "Example User");
         $email = new Intruder($email);
 
-        $this->assertSame(["test@example.com" => "Example User"], $email->to);
+        $this->assertCount(1, $email->to);
+        $this->assertSame("test@example.com", $email->to[0]->getAddress());
+        $this->assertSame("Example User", $email->to[0]->getName());
+
         $this->assertSame([], $this->email->to);
     }
     public function testWithRecipient2(): void
@@ -108,19 +115,19 @@ class EmailTest extends TestCase
             ->withRecipient("test2@example.com", "Example User2");
         $email = new Intruder($email);
 
-        $this->assertSame([
-            "test1@example.com" =>  "Example User1",
-            "test2@example.com" =>  "Example User2",
-        ], $email->to);
+        $this->assertCount(2, $email->to);
+        $this->assertSame("test1@example.com", $email->to[0]->getAddress());
+        $this->assertSame("Example User1", $email->to[0]->getName());
+        $this->assertSame("test2@example.com", $email->to[1]->getAddress());
+        $this->assertSame("Example User2", $email->to[1]->getName());
+
         $this->assertSame([], $this->email->to);
     }
     public function testWithRecipient3(): void
     {
-        $email = $this->email->withRecipient("");
-
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage("Invalid recipient specified to send the email to");
-        $email->send();
+        $this->expectExceptionMessage('Email "" does not comply with addr-spec of RFC 2822');
+        $this->email->withRecipient("");
     }
 
 
@@ -132,7 +139,10 @@ class EmailTest extends TestCase
         $email2 = $email1->withoutRecipients();
         $email2 = new Intruder($email2);
 
-        $this->assertSame(["test@example.com" => "Example User"], $email1->to);
+        $this->assertCount(1, $email1->to);
+        $this->assertSame("test@example.com", $email1->to[0]->getAddress());
+        $this->assertSame("Example User", $email1->to[0]->getName());
+
         $this->assertSame([], $email2->to);
     }
 
@@ -142,7 +152,10 @@ class EmailTest extends TestCase
         $email = $this->email->withCc("test@example.com", "Example User");
         $email = new Intruder($email);
 
-        $this->assertSame(["test@example.com" => "Example User"], $email->cc);
+        $this->assertCount(1, $email->cc);
+        $this->assertSame("test@example.com", $email->cc[0]->getAddress());
+        $this->assertSame("Example User", $email->cc[0]->getName());
+
         $this->assertSame([], $this->email->cc);
     }
     public function testWithCc2(): void
@@ -152,10 +165,12 @@ class EmailTest extends TestCase
             ->withCc("test2@example.com", "Example User2");
         $email = new Intruder($email);
 
-        $this->assertSame([
-            "test1@example.com" =>  "Example User1",
-            "test2@example.com" =>  "Example User2",
-        ], $email->cc);
+        $this->assertCount(2, $email->cc);
+        $this->assertSame("test1@example.com", $email->cc[0]->getAddress());
+        $this->assertSame("Example User1", $email->cc[0]->getName());
+        $this->assertSame("test2@example.com", $email->cc[1]->getAddress());
+        $this->assertSame("Example User2", $email->cc[1]->getName());
+
         $this->assertSame([], $this->email->cc);
     }
 
@@ -168,7 +183,10 @@ class EmailTest extends TestCase
         $email2 = $email1->withoutCc();
         $email2 = new Intruder($email2);
 
-        $this->assertSame(["test@example.com" => "Example User"], $email1->cc);
+        $this->assertCount(1, $email1->cc);
+        $this->assertSame("test@example.com", $email1->cc[0]->getAddress());
+        $this->assertSame("Example User", $email1->cc[0]->getName());
+
         $this->assertSame([], $email2->cc);
     }
 
@@ -178,7 +196,10 @@ class EmailTest extends TestCase
         $email = $this->email->withBcc("test@example.com", "Example User");
         $email = new Intruder($email);
 
-        $this->assertSame(["test@example.com" => "Example User"], $email->bcc);
+        $this->assertCount(1, $email->bcc);
+        $this->assertSame("test@example.com", $email->bcc[0]->getAddress());
+        $this->assertSame("Example User", $email->bcc[0]->getName());
+
         $this->assertSame([], $this->email->bcc);
     }
     public function testWithBcc2(): void
@@ -188,10 +209,12 @@ class EmailTest extends TestCase
             ->withBcc("test2@example.com", "Example User2");
         $email = new Intruder($email);
 
-        $this->assertSame([
-            "test1@example.com" =>  "Example User1",
-            "test2@example.com" =>  "Example User2",
-        ], $email->bcc);
+        $this->assertCount(2, $email->bcc);
+        $this->assertSame("test1@example.com", $email->bcc[0]->getAddress());
+        $this->assertSame("Example User1", $email->bcc[0]->getName());
+        $this->assertSame("test2@example.com", $email->bcc[1]->getAddress());
+        $this->assertSame("Example User2", $email->bcc[1]->getName());
+
         $this->assertSame([], $this->email->bcc);
     }
 
@@ -204,7 +227,10 @@ class EmailTest extends TestCase
         $email2 = $email1->withoutBcc();
         $email2 = new Intruder($email2);
 
-        $this->assertSame(["test@example.com" => "Example User"], $email1->bcc);
+        $this->assertCount(1, $email1->bcc);
+        $this->assertSame("test@example.com", $email1->bcc[0]->getAddress());
+        $this->assertSame("Example User", $email1->bcc[0]->getName());
+
         $this->assertSame([], $email2->bcc);
     }
 

@@ -5,6 +5,16 @@ Changelog
 
 --------
 
+## 3.0.0 - 2024-02-04
+
+### Changed
+
+* [Upstream] Switched from swiftmailer to symfony/mailer
+* [Mailer] The send() method no longer returns the number of successful recipients.
+* [Support] Added support for PHP 8.2, 8.3 and 8.4
+
+--------
+
 ## 2.1.0 - 2022-09-08
 
 ### Changed

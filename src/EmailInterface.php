@@ -152,8 +152,6 @@ interface EmailInterface
 
     /**
      * Send the message.
-     *
-     * @return int (number of successful recipients)
      */
-    public function send(): int;
+    public function send(): void;
 }

@@ -3,6 +3,9 @@
 namespace duncan3dc\Mailer;
 
 use duncan3dc\Laravel\Blade;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Exception\RfcComplianceException;
+use Symfony\Component\Mime\Part\File;
 
 class Email implements EmailInterface
 {
@@ -27,34 +30,29 @@ class Email implements EmailInterface
     private $attachments = [];
 
     /**
-     * @var array $to The addresses to send the message to
+     * @var array<Address> $to The addresses to send the message to
      */
     private $to = [];
 
     /**
-     * @var array $cc The addresses to cc on the message
+     * @var array<Address> $cc The addresses to cc on the message
      */
     private $cc = [];
 
     /**
-     * @var array $bcc The addresses to bcc on the message
+     * @var array<Address> $bcc The addresses to bcc on the message
      */
     private $bcc = [];
 
     /**
-     * @var array $replyTo The address to use as the reply to for the message
+     * @var Address|null $replyTo The address to use as the reply to for the message
      */
-    private $replyTo = [];
+    private $replyTo = null;
 
     /**
-     * @var string $fromAddress The address to send the message from.
+     * @var ?Address $from The address to send the message from.
      */
-    private $fromAddress = "no-reply@example.com";
-
-    /**
-     * @var string $fromName The name to send the message from.
-     */
-    private $fromName = "";
+    private $from;
 
 
     /**
@@ -86,6 +84,16 @@ class Email implements EmailInterface
     }
 
 
+    private function address(string $address, ?string $name): Address
+    {
+        try {
+            return new Address($address, $name ?? "");
+        } catch (RfcComplianceException $e) {
+            throw new Exception($e->getMessage(), $e->getCode(), $e);
+        }
+    }
+
+
     /**
      * Set the address to send emails from.
      *
@@ -96,14 +104,7 @@ class Email implements EmailInterface
      */
     public function withFromAddress(string $address, string $name = null): EmailInterface
     {
-        $email = clone $this;
-
-        $email->fromAddress = $address;
-        if ($name !== null) {
-            $email->fromName = $name;
-        }
-
-        return $email;
+        return $this->clone("from", $this->address($address, $name));
     }
 
 
@@ -132,7 +133,7 @@ class Email implements EmailInterface
     {
         $email = clone $this;
 
-        $email->to[$address] = $name ?? $address;
+        $email->to[] = $this->address($address, $name);
 
         return $email;
     }
@@ -161,7 +162,7 @@ class Email implements EmailInterface
     {
         $email = clone $this;
 
-        $email->cc[$address] = $name ?? $address;
+        $email->cc[] = $this->address($address, $name);
 
         return $email;
     }
@@ -190,7 +191,7 @@ class Email implements EmailInterface
     {
         $email = clone $this;
 
-        $email->bcc[$address] = $name ?? $address;
+        $email->bcc[] = $this->address($address, $name);
 
         return $email;
     }
@@ -217,9 +218,7 @@ class Email implements EmailInterface
      */
     public function withReplyTo(string $address, string $name = null): EmailInterface
     {
-        return $this->clone("replyTo", [
-            $address    =>  $name ?? $address,
-        ]);
+        return $this->clone("replyTo", $this->address($address, $name));
     }
 
 
@@ -230,7 +229,7 @@ class Email implements EmailInterface
      */
     public function withoutReplyTo(): EmailInterface
     {
-        return $this->clone("replyTo", []);
+        return $this->clone("replyTo", null);
     }
 
 
@@ -309,20 +308,14 @@ class Email implements EmailInterface
 
     /**
      * Send the message.
-     *
-     * @return int (number of successful recipients)
      */
-    public function send(): int
+    public function send(): void
     {
         if (count($this->to) < 1) {
             throw new Exception("No recipients specified to send the email to");
         }
-        $keys = array_keys($this->to);
-        if (!$keys[0]) {
-            throw new Exception("Invalid recipient specified to send the email to");
-        }
 
-        $message = new \Swift_Message;
+        $message = new \Symfony\Component\Mime\Email();
 
         $html = "<html>";
             $html .= "<head>";
@@ -336,43 +329,39 @@ class Email implements EmailInterface
         $html .= "</html>";
 
         # Give the message a subject
-        $message->setSubject($this->subject);
+        $message->subject($this->subject);
 
         # Set the to address
-        $message->setTo($this->to);
+        $message->to(...$this->to);
 
         # Add the html body and an alternative plain text version
-        $message->setBody($html, "text/html");
-        $message->addPart("To view this message, please use an HTML compatible email viewer.", "text/plain");
+        $message->html($html);
+        $message->text("To view this message, please use an HTML compatible email viewer.");
 
         # If attachments have been specified then attach them
         foreach ($this->attachments as $path => $filename) {
-            $attachment = \Swift_Attachment::fromPath($path);
-            if ($filename) {
-                $attachment->setFilename($filename);
-            }
-            $message->attach($attachment);
+            $message->attachFromPath($path, $filename ?: null);
         }
 
         # Set the relevant cc
         if (count($this->cc) > 0) {
-            $message->setCc($this->cc);
+            $message->cc(...$this->cc);
         }
 
         # Set the relevant bcc
         if (count($this->bcc) > 0) {
-            $message->setBcc($this->bcc);
+            $message->bcc(...$this->bcc);
         }
 
         # Set the relevant reply-to
-        if (count($this->replyTo) > 0) {
-            $message->setReplyTo($this->replyTo);
+        if ($this->replyTo !== null) {
+            $message->replyTo($this->replyTo);
         }
 
         # Set the from address
-        $message->setFrom([$this->fromAddress => $this->fromName]);
+        $message->from($this->from ?? new Address("no-reply@example.com"));
 
         # Send the message
-        return $this->server->send($message);
+        $this->server->send($message);
     }
 }

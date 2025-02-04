@@ -2,6 +2,10 @@
 
 namespace duncan3dc\Mailer;
 
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mailer\Transport;
+
 class Server implements ServerInterface
 {
     /**
@@ -10,7 +14,7 @@ class Server implements ServerInterface
     private $hostname = "localhost";
 
     /**
-     * @var \Swift_Mailer $mailer An instance of the swift mailer class.
+     * @var MailerInterface $mailer An instance of the symfony mailer class.
      */
     private $mailer;
 
@@ -134,17 +138,15 @@ class Server implements ServerInterface
 
 
     /**
-     * Get a singleton of the swift mailer class.
-     *
-     * @return \Swift_Mailer
+     * Get a singleton of the symfony mailer class.
      */
-    private function getMailer(): \Swift_Mailer
+    private function getMailer(): MailerInterface
     {
         if ($this->mailer) {
             return $this->mailer;
         }
 
-        $smtp = new \Swift_SmtpTransport($this->hostname, $this->port, $this->encryption);
+        $smtp = new Transport\Smtp\EsmtpTransport($this->hostname, $this->port, $this->encryption);
 
         if ($this->username !== null) {
             $smtp->setUsername($this->username);
@@ -153,7 +155,7 @@ class Server implements ServerInterface
             $smtp->setPassword($this->password);
         }
 
-        $this->mailer = new \Swift_Mailer($smtp);
+        $this->mailer = new Mailer($smtp);
 
         return $this->mailer;
     }
@@ -161,18 +163,15 @@ class Server implements ServerInterface
 
     /**
      * Send an email using this server.
-     *
-     * @param \Swift_Message $message The email message to send.
-     *
-     * @return int (number of successful recipients)
      */
-    public function send(\Swift_Message $message): int
+    public function send(\Symfony\Component\Mime\Email $message): bool
     {
         # Set the bounce return path if one has been specified
         if ($this->returnPath) {
-            $message->setReturnPath($this->returnPath);
+            $message->returnPath($this->returnPath);
         }
 
-        return $this->getMailer()->send($message);
+        $this->getMailer()->send($message);
+        return true;
     }
 }

@@ -13,8 +13,7 @@
     }],
     "require": {
         "duncan3dc/blade": "^4.0",
-        "swiftmailer/swiftmailer": "^6.0",
-        "egulias/email-validator": "^3.2",
+        "symfony/mailer": "^5.4 || ^6.0 || 7.0",
         "php": "^7.3 || ^8.0"
     },
     "require-dev": {
