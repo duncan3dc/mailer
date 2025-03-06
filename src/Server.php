@@ -50,7 +50,7 @@ class Server implements ServerInterface
      * @param string $hostname The hostname of the server
      * @param int $pot The port to connect to the server on
      */
-    public function __construct(string $hostname = null, string $port = null)
+    public function __construct(?string $hostname = null, ?string $port = null)
     {
         if ($hostname !== null) {
             $this->hostname = $hostname;

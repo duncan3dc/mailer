@@ -9,11 +9,11 @@ interface EmailInterface
      * Set the address to send emails from.
      *
      * @param string $address The address to send the message from
-     * @param string $name The name to send the message from
+     * @param string|null $name The name to send the message from
      *
      * @return EmailInterface
      */
-    public function withFromAddress(string $address, string $name = null): EmailInterface;
+    public function withFromAddress(string $address, ?string $name = null): EmailInterface;
 
 
     /**
@@ -30,11 +30,11 @@ interface EmailInterface
      * Add a recipient to the message.
      *
      * @param string $address The email address of the recipient
-     * @param string $name The name of the recipient
+     * @param string|null $name The name of the recipient
      *
      * @return EmailInterface
      */
-    public function withRecipient(string $address, string $name = null): EmailInterface;
+    public function withRecipient(string $address, ?string $name = null): EmailInterface;
 
 
     /**
@@ -49,11 +49,11 @@ interface EmailInterface
      * Add a cc to the message.
      *
      * @param string $address The email address of the recipient
-     * @param string $name The name of the recipient
+     * @param string|null $name The name of the recipient
      *
      * @return EmailInterface
      */
-    public function withCc(string $address, string $name = null): EmailInterface;
+    public function withCc(string $address, ?string $name = null): EmailInterface;
 
 
     /**
@@ -68,11 +68,11 @@ interface EmailInterface
      * Add a bcc to the message.
      *
      * @param string $address The email address of the recipient
-     * @param string $name The name of the recipient
+     * @param string|null $name The name of the recipient
      *
      * @return EmailInterface
      */
-    public function withBcc(string $address, string $name = null): EmailInterface;
+    public function withBcc(string $address, ?string $name = null): EmailInterface;
 
 
     /**
@@ -87,11 +87,11 @@ interface EmailInterface
      * Set the reply to address for the message.
      *
      * @param string $address The email address of the recipient
-     * @param string $name The name of the recipient
+     * @param string|null $name The name of the recipient
      *
      * @return EmailInterface
      */
-    public function withReplyTo(string $address, string $name = null): EmailInterface;
+    public function withReplyTo(string $address, ?string $name = null): EmailInterface;
 
 
     /**
@@ -116,11 +116,11 @@ interface EmailInterface
      * Add content to the body of the message.
      *
      * @param string $view The name of the view to use
-     * @param array $params Parameters to pass to the view
+     * @param array|null $params Parameters to pass to the view
      *
      * @return EmailInterface
      */
-    public function withView(string $view, array $params = null): EmailInterface;
+    public function withView(string $view, ?array $params = null): EmailInterface;
 
 
     /**
@@ -135,11 +135,11 @@ interface EmailInterface
      * Add an attachment to the message.
      *
      * @param string $path The full path to the file to attach
-     * @param string $filename An optional filename to use (instead of the filename from the path)
+     * @param string|null $filename An optional filename to use (instead of the filename from the path)
      *
      * @return EmailInterface
      */
-    public function withAttachment(string $path, string $filename = null): EmailInterface;
+    public function withAttachment(string $path, ?string $filename = null): EmailInterface;
 
 
     /**

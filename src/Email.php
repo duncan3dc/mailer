@@ -102,7 +102,7 @@ class Email implements EmailInterface
      *
      * @return EmailInterface
      */
-    public function withFromAddress(string $address, string $name = null): EmailInterface
+    public function withFromAddress(string $address, ?string $name = null): EmailInterface
     {
         return $this->clone("from", $this->address($address, $name));
     }
@@ -129,7 +129,7 @@ class Email implements EmailInterface
      *
      * @return EmailInterface
      */
-    public function withRecipient(string $address, string $name = null): EmailInterface
+    public function withRecipient(string $address, ?string $name = null): EmailInterface
     {
         $email = clone $this;
 
@@ -158,7 +158,7 @@ class Email implements EmailInterface
      *
      * @return EmailInterface
      */
-    public function withCc(string $address, string $name = null): EmailInterface
+    public function withCc(string $address, ?string $name = null): EmailInterface
     {
         $email = clone $this;
 
@@ -187,7 +187,7 @@ class Email implements EmailInterface
      *
      * @return EmailInterface
      */
-    public function withBcc(string $address, string $name = null): EmailInterface
+    public function withBcc(string $address, ?string $name = null): EmailInterface
     {
         $email = clone $this;
 
@@ -216,7 +216,7 @@ class Email implements EmailInterface
      *
      * @return EmailInterface
      */
-    public function withReplyTo(string $address, string $name = null): EmailInterface
+    public function withReplyTo(string $address, ?string $name = null): EmailInterface
     {
         return $this->clone("replyTo", $this->address($address, $name));
     }
@@ -254,7 +254,7 @@ class Email implements EmailInterface
      *
      * @return EmailInterface
      */
-    public function withView(string $view, array $params = null): EmailInterface
+    public function withView(string $view, ?array $params = null): EmailInterface
     {
         if (!is_array($params)) {
             $params = [];
@@ -285,7 +285,7 @@ class Email implements EmailInterface
      *
      * @return EmailInterface
      */
-    public function withAttachment(string $path, string $filename = null): EmailInterface
+    public function withAttachment(string $path, ?string $filename = null): EmailInterface
     {
         $email = clone $this;
 

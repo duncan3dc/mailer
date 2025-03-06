@@ -5,6 +5,15 @@ Changelog
 
 --------
 
+## 3.0.1 - 2025-03-06
+
+### Fixed
+
+* [Mailer] Any nullable arguments are not explicitly defined as such.
+* [Upstream] Corrected the require for symfony/mailer.
+
+--------
+
 ## 3.0.0 - 2024-02-04
 
 ### Changed
