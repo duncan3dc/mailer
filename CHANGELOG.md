@@ -1,7 +1,12 @@
 Changelog
 =========
 
-## x.y.z - UNRELEASED
+## 3.1.0 - 2026-06-09
+
+### Changed
+
+* [Support] Added support for Symfony 8.
+* [Support] Added support for PHP 8.5.
 
 --------
 
